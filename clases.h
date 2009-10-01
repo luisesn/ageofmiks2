@@ -41,6 +41,7 @@ typedef struct def_mem
     int x;  //Coordenadas
     int y;
     int o;
+    int t;
     int activa;
 };
 
@@ -69,7 +70,7 @@ void anadir(int x, int y, int o, int tipo)
         if (m[j].activa!=0) 
         {
             if (m[j].o==o)
-            if (m[j].tipo==tipo) { m[j].x=x; m[j].y=y; return;}
+            if (m[j].tipo==tipo) { m[j].x=x; m[j].y=y; m[j].t=SDL_GetTicks(); return;}
         }
     }   
     for (int j=0; j<MAX_MEM; j++)
@@ -81,6 +82,7 @@ void anadir(int x, int y, int o, int tipo)
             m[j].y=y;
             m[j].o=o;
             m[j].tipo=tipo;
+            m[j].t=SDL_GetTicks();
             return;
         }
     }
@@ -114,7 +116,8 @@ typedef class tipo_objeto
 {
 public:
     int x,y; //Coordenadas
-    int cx,cy; // ¿Coordenadas dentro de la casilla?
+    int cx;
+    int cy; // ¿Coordenadas dentro de la casilla?
     int direccion; //Para el sprite
     int ap;
     int tipo; //Tipo de objeto
@@ -192,7 +195,8 @@ typedef class tipo_unidad
 {
 public:
     int x,y; //Coordenadas
-    int cx,cy; // ¿Coordenadas dentro de la casilla?
+    int cx;
+    int cy; // ¿Coordenadas dentro de la casilla?
     int direccion; //Para el sprite
     int ap;
     int tipo; //Tipo de objeto
@@ -221,7 +225,8 @@ int activa()
 
 int hallegado()
 {
-    if (orden.dx()==x && orden.dy()==y && cx==5 && cy==5) { return 1; } else { return 0;}
+    //if (orden.dx()==x && orden.dy()==y && cx==5 && cy==5) { return 1; } else { return 0;}
+    if (orden.dx()==x && orden.dy()==y) { return 1; } else { return 0;}
 }
 void escaner();
 
@@ -240,7 +245,7 @@ void procesar_orden()
                 //Movemos
                 mover();
                 //Comprobamos si hemos llegado
-                if (((orden.dx()*100+5)==(x*100+cx)) && ((orden.dy()*1000+5)==(y*1000+cy)))
+                if (hallegado()==1)
                 {
                     // destx=x y desty=y <- orden cumplida
                     orden.realizada=0;
@@ -256,7 +261,7 @@ void procesar_orden()
                         //Movemos la unidad
                         mover();
                         //Comprobamos si hemos llegado
-                        if ((abs((orden.dx()*100+5)-(x*100+cx))<101) && (abs((orden.dy()*1000+5)-(y*1000+cy))<101))
+                        if (hallegado()==1)
                         {
                             orden.s++; //Estado a carga
                         }
@@ -297,7 +302,7 @@ void procesar_orden()
                         //Movemos la unidad
                         mover();
                         //Comprobamos si hemos llegado
-                        if ((abs((orden.dx()*100+5)-(x*100+cx))<101) && (abs((orden.dy()*1000+5)-(y*1000+cy))<101))
+                        if (hallegado()==1)
                         {
                             orden.s++; //Estado a descarga
                         }
@@ -375,7 +380,7 @@ void procesar_orden()
                         mover();
                         //printf ("[%d]M2:%d.%d,%d.%d -> %d,%d\r\n",id_jugador, x, cx, y ,cy, orden.dx(), orden.dy());
                         //Comprobamos si hemos llegado
-                        if (hallegado()==1) {orden.s++; printf ("[%d]A:%d.%d,%d.%d -> %d,%d\r\n",id_jugador, x, cx, y ,cy, orden.dx(), orden.dy()); }
+                        if (hallegado()==1) {orden.s++; }
                         buscar_recursos();
                         break;
                     case 2:
@@ -398,7 +403,7 @@ void procesar_orden()
                         //Movemos la unidad
                         mover();
                         //Comprobamos si hemos llegado
-                        if (((orden.dx()*100+5)==(x*100+cx)) && ((orden.dy()*1000+5)==(y*1000+cy)))
+                        if (hallegado()==1)
                         {
                             if (actitud==ACTITUD_PASIVA) {orden.s=0;} else {orden.s=2;}
                         }
@@ -522,15 +527,16 @@ void mover()
         {
             abajo();
         } else {
-            if (dy==y)
-            if (cy>5)
+            if (5<cy)
             {
                 arriba();
             } else {
-                if (cy<5) abajo();
+                if (5>cy) abajo();
             }
         }
     }
+
+    
     if (dx<x) // El objetivo esta a la izda.
     {
         izda();
@@ -539,23 +545,21 @@ void mover()
         {
             dcha();
         } else {
-            if (dx==x)
-            if (cx>5)
+            if (5<cx)
             {
                 izda();
             } else {
-                if (cx<5) dcha();
+                if (5>cx) dcha();
             }
         }
     }
-    //Animamos
     if (sprite==1) {sprite=0;} else {sprite=1;}
 }
 void arriba()
 {
    if (cy>0)
    { 
-        cy--;
+        cy=cy+1;
    } else {
         if (y>0) 
         { 
@@ -572,7 +576,7 @@ void abajo()
 {
    if (cy<10)
    { 
-        cy++;
+        cy=cy+1;
    } else {
         if (y<ANCHOY) 
         { 
@@ -694,6 +698,7 @@ void def_memoria::comprobar()
                     if (obj[m[j].o].construido!=1) m[j].activa=0;
                     break;
                 case MEMORIA_UNIDAD_ENEMIGA:
+                    if (SDL_GetTicks()-m[j].t>1000) m[j].activa=0;
                     if (ud[m[j].o].activa()!=1) m[j].activa=0;
                     break;
             }

@@ -43,7 +43,7 @@ void cargar_mapa()
      {
               for (int tempx=0; tempx<ANCHOX; tempx++)
               {
-                      mapa[tempx][tempy]=fgetc(f_mapa)-'0';
+                      mapa[tempx][tempy]=0; //fgetc(f_mapa)-'0';
                       #ifdef DEBUG
                              //printf ("%d,%d --> %d\r\n",tempx,tempy,mapa[tempx][tempy]);
                       #endif
@@ -79,6 +79,8 @@ int crear_aldeano(int id_p)
             ud[id].ptos_resistencia=RESISTENCIA_ALDEANO;
             ud[id].x=obj[jugador[id_p].objeto_centro].x+1;
             ud[id].y=obj[jugador[id_p].objeto_centro].y+1;
+            ud[id].cx=5;
+            ud[id].cy=5;
             ud[id].tipo=UD_TIPO_ALDEANO;
             ud[id].alcance_vision=ALCANCE_ALDEANO;
             ud[id].actitud=ACTITUD_PASIVA;
