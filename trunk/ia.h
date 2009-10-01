@@ -7,8 +7,8 @@ typedef class def_ia
 public:
     //
     int id_jugador;
-    int *j;
-    int *seleccion;
+    int j;
+    int seleccion;
     
     //
     int unidades_minimas_recogiendo;
@@ -225,7 +225,7 @@ void main()
             //No hay ningún aldeano libre
             //printf("No hay ningún aldeano libre.\r\n");
         }
-
+/*********************
         //Estrategia de defensa
         if (recursos>recursos_minimos_defensas)
         {
@@ -268,7 +268,8 @@ void main()
                 }
             }
         }
-        
+ ****************************/
+/**********************************************
         //Estrategia de ataque
         if (recursos>recursos_minimos_ataque)
         {
@@ -321,7 +322,8 @@ void main()
             }
             
         }
-        
+ *****************************************/
+ /************************************+       
         //Estrategia de recursos sobrantes
         if (recursos>(recursos_minimos_defensas+recursos_minimos_ataque))
         {
@@ -344,11 +346,11 @@ void main()
                     ud[t].explorar();
                 }
             }
-            */
+            
             //unidades_patrullando_edificio++;
             //unidades_maximas_defensa+=5;
-        }          
-                
+        }
+*************************************/
     } else {
         //Si no hay aldeanos... última estrategia...
     }
