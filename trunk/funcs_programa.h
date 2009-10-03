@@ -1,3 +1,9 @@
+/*************************************************************
+Age of miks 2
+
+func_programa.h: Funciones externas al juego
+*************************************************************/
+
 void quitar(void)
 {
      //fflush(NULL);

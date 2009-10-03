@@ -1,3 +1,9 @@
+/*************************************************************
+Age of miks 2
+
+ia.h: clase de la ia del juego
+*************************************************************/
+
 int crear_aldeano(int id_p);
 int crear_soldado(int id_p);
 

@@ -1,3 +1,10 @@
+/*************************************************************
+Age of miks 2
+
+main.h: funciones generales e includes
+*************************************************************/
+
+
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 #include <SDL/SDL_mixer.h>

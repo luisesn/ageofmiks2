@@ -1,3 +1,8 @@
+/*************************************************************
+Age of miks 2
+
+funcs_graficas.h: funciones gráficas del juego
+*************************************************************/
 //Carga sprites
 SDL_Surface *cs(const char *archivo) 
 {
