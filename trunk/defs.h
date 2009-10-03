@@ -1,6 +1,6 @@
 //Dimensiones del mapa
-#define      ANCHOX         20
-#define      ANCHOY         20
+#define      ANCHOX         100
+#define      ANCHOY         100
 
 
 //Dimensiones de la ventana

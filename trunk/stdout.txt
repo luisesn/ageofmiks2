@@ -7,3 +7,19 @@ Cargando sprites mapa...Cargados
 [1] Encontrado aldeano libre 3, asignado.
 [2] Encontrado aldeano libre 5, asignado.
 [3] Encontrado aldeano libre 7, asignado.
+[1] Encontrado aldeano libre 15, asignado.
+[1] Encontrado aldeano libre 16, asignado.
+[1] Encontrado aldeano libre 18, asignado.
+[1] Encontrado aldeano libre 20, asignado.
+[1] Encontrado aldeano libre 25, asignado.
+[1] Encontrado aldeano libre 29, asignado.
+[1] Encontrado aldeano libre 30, asignado.
+[1] Encontrado aldeano libre 31, asignado.
+[1] Encontrado aldeano libre 32, asignado.
+[1] Encontrado aldeano libre 33, asignado.
+[1] Encontrado aldeano libre 34, asignado.
+[1] Encontrado aldeano libre 35, asignado.
+[1] Encontrado aldeano libre 36, asignado.
+[1] Encontrado aldeano libre 40, asignado.
+[1] Encontrado aldeano libre 41, asignado.
+[1] Encontrado aldeano li

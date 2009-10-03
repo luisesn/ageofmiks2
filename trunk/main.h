@@ -27,7 +27,7 @@ void jugadores_configurar()
 {
     for (int j=0; j<jugadores; j++)
     {
-        crear_aldeano(j);crear_aldeano(j);
+        crear_aldeano(j);        crear_aldeano(j);
     }
 
 }
@@ -220,7 +220,7 @@ void crear_objetos()
         jugador[j].objeto_centro=j;
     }
 
-    for (int temp=0; temp<5; temp++)
+    for (int temp=0; temp<40; temp++)
       {
             construir_objeto(rand()%ANCHOX, rand()%ANCHOY, 1,-1);
       }

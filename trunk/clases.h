@@ -194,9 +194,14 @@ tipo_jugador jugador[jugadores];
 typedef class tipo_unidad
 {
 public:
-    int x,y; //Coordenadas
+    int x;
+    int t3;
+    int y; //Coordenadas
+    int t4;
     int cx;
-    int cy; // ¿Coordenadas dentro de la casilla?
+    int t1;
+    int cy;
+    int t2; // ¿Coordenadas dentro de la casilla?
     int direccion; //Para el sprite
     int ap;
     int tipo; //Tipo de objeto
@@ -225,8 +230,8 @@ int activa()
 
 int hallegado()
 {
-    //if (orden.dx()==x && orden.dy()==y && cx==5 && cy==5) { return 1; } else { return 0;}
-    if (orden.dx()==x && orden.dy()==y) { return 1; } else { return 0;}
+    if (orden.dx()==x && orden.dy()==y && cx==5 && cy==5) { return 1; } else { return 0;}
+    //if (orden.dx()==x && orden.dy()==y) { return 1; } else { return 0;}
 }
 void escaner();
 
@@ -242,14 +247,15 @@ void procesar_orden()
                 orden.realizada=0;
                 break;
             case ORDEN_IR: //Orden de movimiento
-                //Movemos
-                mover();
                 //Comprobamos si hemos llegado
                 if (hallegado()==1)
                 {
                     // destx=x y desty=y <- orden cumplida
                     orden.realizada=0;
                     sprite=0;
+                } else {
+                    //Movemos
+                    mover();
                 }
                 break;
             case ORDEN_OBTENER_RECURSOS: //Orden de ir a buscar recursos
@@ -258,12 +264,12 @@ void procesar_orden()
                     case 0: //Yendo a por recursos
                         //Asignamos las coordenadas
                         orden.set(obj[orden.o].x,obj[orden.o].y);
-                        //Movemos la unidad
-                        mover();
                         //Comprobamos si hemos llegado
                         if (hallegado()==1)
                         {
                             orden.s++; //Estado a carga
+                        } else {
+                            mover();      
                         }
                         break;
                     case 1: //Cargando recurso
@@ -299,12 +305,13 @@ void procesar_orden()
                         orden.s++;
                         break;
                     case 3: //Volviendo a base
-                        //Movemos la unidad
-                        mover();
                         //Comprobamos si hemos llegado
                         if (hallegado()==1)
                         {
                             orden.s++; //Estado a descarga
+                        } else {
+                            //Movemos la unidad
+                            mover();
                         }
                         break;
                     case 4:
@@ -334,12 +341,13 @@ void procesar_orden()
                         orden.s=1;
                         break;
                     case 1: //Yendo
-                        //Movemos la unidad
-                        mover();
                         //Comprobamos si hemos llegado
                         if (hallegado()==1)
                         {
                             if (actitud==ACTITUD_PASIVA) {orden.s=0;} else {orden.s=2;}
+                        } else {
+                            //Movemos la unidad
+                            mover();
                         }
                         break;
                     case 2: // Escaneamos
@@ -377,10 +385,15 @@ void procesar_orden()
                         //Movemos la unidad
                         //printf("%d,%d->%d,%d\r\n",obj[jugador[id_jugador].objeto_centro].x,(int) (orden.o*co[orden.b]),(int) (orden.o*se[orden.b]));
                         //printf ("[%d]M1:%d.%d,%d.%d -> %d,%d\r\n",id_jugador, x, cx, y ,cy, orden.dx(), orden.dy());
-                        mover();
                         //printf ("[%d]M2:%d.%d,%d.%d -> %d,%d\r\n",id_jugador, x, cx, y ,cy, orden.dx(), orden.dy());
                         //Comprobamos si hemos llegado
-                        if (hallegado()==1) {orden.s++; }
+                        if (hallegado()==1)
+                        {
+                            orden.s++;
+                        } else {
+                            //Movemos la unidad
+                            mover();
+                        }
                         buscar_recursos();
                         break;
                     case 2:
@@ -400,12 +413,13 @@ void procesar_orden()
                         orden.s++;
                         break;
                     case 1: //Yendo
-                        //Movemos la unidad
-                        mover();
                         //Comprobamos si hemos llegado
                         if (hallegado()==1)
                         {
                             if (actitud==ACTITUD_PASIVA) {orden.s=0;} else {orden.s=2;}
+                        } else {
+                            //Movemos la unidad
+                            mover();
                         }
                         break;
                     case 2: // Escaneamos
@@ -418,12 +432,13 @@ void procesar_orden()
                 switch (orden.s)
                 {
                     case 0: //Yendo
-                        //Movemos la unidad
-                        mover();
                         //Comprobamos si hemos llegado
                         if (hallegado()==1)
                         {
                             orden.s++;
+                        } else {
+                            //Movemos la unidad
+                            mover();
                         }
                         break;
                     case 1: //Atacando
@@ -557,9 +572,10 @@ void mover()
 }
 void arriba()
 {
+    
    if (cy>0)
    { 
-        cy=cy+1;
+        cy=cy-1;
    } else {
         if (y>0) 
         { 
@@ -574,10 +590,12 @@ void arriba()
       
 void abajo()
 {
+    
    if (cy<10)
    { 
         cy=cy+1;
    } else {
+   
         if (y<ANCHOY) 
         { 
           //if (x<ANCHOX) x++;
@@ -594,18 +612,21 @@ void izda()
    { 
         cx--;
    } else {
+
         if (x>0) 
         { 
           //if (y<ANCHOY) y++;
           x--;
           cx=9;
         }
+
    }
    direccion=1;
 }
 
 void dcha()
 {
+    
     if (cx<10)
     { 
         cx++;
@@ -647,6 +668,7 @@ void tipo_unidad::atacar_()
                     ud[j].sprite=2;
                     sprite=2;
                     Mix_PlayChannel(-1,payum,0);
+                    explorar();
                     break;
                 }
             }
