@@ -1,3 +1,10 @@
+/*************************************************************
+Age of miks 2
+
+defs.h: Definiciones y variables principales del programa
+*************************************************************/
+
+
 //Dimensiones del mapa
 #define      ANCHOX         100
 #define      ANCHOY         100

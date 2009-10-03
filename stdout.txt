@@ -22,4 +22,10 @@ Cargando sprites mapa...Cargados
 [1] Encontrado aldeano libre 36, asignado.
 [1] Encontrado aldeano libre 40, asignado.
 [1] Encontrado aldeano libre 41, asignado.
-[1] Encontrado aldeano li
+[1] Encontrado aldeano libre 42, asignado.
+[1] Encontrado aldeano libre 43, asignado.
+[1] Encontrado aldeano libre 44, asignado.
+[1] Encontrado aldeano libre 45, asignado.
+[1] Encontrado aldeano libre 49, asignado.
+[1] Encontrado aldeano libre 1, asignado.
+[1] Encontrado aldeano libre 52, asignado.

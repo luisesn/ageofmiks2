@@ -1,3 +1,9 @@
+/*************************************************************
+Age of miks 2
+
+clases.h: clases de los objetos y unidades del juego
+*************************************************************/
+
 #define UD_TIPO_ALDEANO 1
 #define UD_TIPO_SOLDADO 2
 
