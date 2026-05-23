@@ -1,20 +1,16 @@
 /*************************************************************
 Age of miks 2
 
-funcs_graficas.h: funciones gráficas del juego
+funcs_graficas.h: funciones grï¿½ficas del juego
 *************************************************************/
 //Carga sprites
-SDL_Surface *cs(const char *archivo) 
+SDL_Surface *cs(const char *archivo)
 {
-    SDL_Surface *tmp, *bmp;
-    tmp=SDL_LoadBMP(archivo);
-    Uint32 color_key=SDL_MapRGB(tmp->format, 255, 0, 255);
-    if(!tmp) return 0;
-    SDL_SetColorKey(tmp, SDL_SRCCOLORKEY|SDL_RLEACCEL, color_key);
-    bmp=SDL_DisplayFormat(tmp);
-    SDL_FreeSurface(tmp);
-    if(!bmp) printf("Fallo al cargar: %c\r\n", archivo);
-    return bmp;
+    SDL_Surface *tmp = SDL_LoadBMP(archivo);
+    if (!tmp) { printf("Fallo al cargar: %s\r\n", archivo); return NULL; }
+    Uint32 color_key = SDL_MapRGB(tmp->format, 255, 0, 255);
+    SDL_SetColorKey(tmp, SDL_TRUE, color_key);
+    return tmp;
 }
 
 //Funcion para dibujar texto

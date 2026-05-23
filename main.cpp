@@ -13,9 +13,7 @@ int main (int argc, char *argv[])
 {
     
     srand(time(0));
-    pthread_t thread1; 
-    pthread_t thread2; 
-    double ang=0,;
+    double ang = 0;
     camara=1;
     seleccionn=2;
     atexit (SDL_Quit);
@@ -31,10 +29,7 @@ int main (int argc, char *argv[])
     jugadores_configurar();
     for (int j=0; j<jugadores-1; j++) ia[j].configurar(j+1);
 
-    //Actualización asíncrona (con hilos)
-    //pthread_create(&thread1, NULL, actualizar_uds_bd, NULL);
-    //pthread_create(&thread2, NULL, actualizar_objetos, NULL);
-       textprintf(pantalla, fuente,0,posy,clr_blanco,"Thread de act.");SDL_Flip(pantalla);
+       textprintf(pantalla, fuente,0,posy,clr_blanco,"Iniciando...");SDL_UpdateWindowSurface(ventana);
        posy+=13;
     //while(!fin) vteclas();
     //SDL_Delay(500);
@@ -95,7 +90,7 @@ int main (int argc, char *argv[])
                 for (int j=0; j<jugadores-1; j++) ia[j].main();      
                           
                 actualizar();
-                //Actualización síncrona
+                //Actualizaciï¿½n sï¿½ncrona
                 fps=int (1000/(SDL_GetTicks()-tiempo));
          while ((SDL_GetTicks()-tiempo)<(1000/25)) { }
     }

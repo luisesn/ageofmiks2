@@ -5,21 +5,16 @@ main.h: funciones generales e includes
 *************************************************************/
 
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_ttf.h>
-#include <SDL/SDL_mixer.h>
-#include <SDL/SDL_net.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include <unistd.h>
 #include <stdarg.h>
-#include <windows.h>
 #include <iostream>
-#include <mysql/mysql.h>
-#include <pthread.h> 
 using namespace std;
 //#include <SDL/SDL_gfxPrimitives.h>
 
@@ -149,7 +144,7 @@ void actualizar ()
     {
         if (ud[j].activa()) u[ud[j].id_jugador]++;
     }
-    textprintf(pantalla, fuente,0,0,clr_blanco,"CAM:%d FPS: %d ¿Sel?: %d Mouse:%d(%d),%d(%d) Scroll:%d,%d",camara, fps, seleccion.n, mousex, curx, mousey, cury,scrollx, scrolly);
+    textprintf(pantalla, fuente,0,0,clr_blanco,"CAM:%d FPS: %d ï¿½Sel?: %d Mouse:%d(%d),%d(%d) Scroll:%d,%d",camara, fps, seleccion.n, mousex, curx, mousey, cury,scrollx, scrolly);
     textprintf(pantalla, fuente,0,14,clr_blanco,"%d %d %d %d %d %d %d",u[0], u[1], u[2], u[3], u[4], u[5], u[6]);
     if (ver_memoria==1)
     for (int i=1; i<jugadores; i++)
@@ -177,7 +172,7 @@ void actualizar ()
             }
         }
     }
-    SDL_Flip(pantalla);
+    SDL_UpdateWindowSurface(ventana);
     /* SDL_Rect rect;
      rect = (SDL_Rect) {0,0,RESX,RESY};
      SDL_FillRect(pantalla, &rect, SDL_MapRGB(pantalla->format, 255, 0, 0));*/
@@ -263,7 +258,7 @@ if (SDL_PollEvent (&event))
              mousey = event.motion.y;
         	//Calculamos las coordenadas de pantalla a partir de las de la casilla
         	//y el desplazamiento de la camara (scrollX, scrollY)
-        	// Ecs. originales de cálculo de posición de sprites del mapa
+        	// Ecs. originales de cï¿½lculo de posiciï¿½n de sprites del mapa
             //px = (x - y)*(32) - scrollx;
             //py = (x + y)*(16) - scrolly;
             //Sacamos (x,y)
@@ -311,7 +306,7 @@ if (SDL_PollEvent (&event))
                 } else {
                     switch (10-(RESX-mousex)/32)//Boton pulsado
                     {
-                        case 1: //Botón 1
+                        case 1: //Botï¿½n 1
                             for (int t=0; t<uds; t++)
                             {
                                 if (ud[t].id_jugador==JUGADOR_LOCAL && ud[t].tipo==UD_TIPO_ALDEANO && ud[t].activa())
@@ -320,7 +315,7 @@ if (SDL_PollEvent (&event))
                                 }
                             }
                             break;
-                        case 10: //Botón 10
+                        case 10: //Botï¿½n 10
                             fin=1;
                             break;
                     }
@@ -349,60 +344,58 @@ if (SDL_PollEvent (&event))
 }
 
 
-#ifdef WIN32
-Uint8 *teclas;  
-teclas=SDL_GetKeyState(NULL);
-if (teclas[SDLK_ESCAPE]) teclas=0;
-   if (teclas[SDLK_UP]) 
+const Uint8 *teclas = SDL_GetKeyboardState(NULL);
+if (teclas[SDL_SCANCODE_ESCAPE]) fin=1;
+   if (teclas[SDL_SCANCODE_UP])
    {
         scrolly-=20;
    }
-   if (teclas[SDLK_DOWN]) 
+   if (teclas[SDL_SCANCODE_DOWN])
    {
         scrolly+=20;
    }
-   if (teclas[SDLK_RIGHT]) 
+   if (teclas[SDL_SCANCODE_RIGHT])
    {
         scrollx+=20;
    }
-   if (teclas[SDLK_LEFT]) 
+   if (teclas[SDL_SCANCODE_LEFT])
    {
         scrollx-=20;
    }
-   
-   if (teclas[SDLK_w]) 
+
+   if (teclas[SDL_SCANCODE_W])
    {
       cury--;
    }
-   if (teclas[SDLK_s]) 
+   if (teclas[SDL_SCANCODE_S])
    {
       cury++;
    }
-   if (teclas[SDLK_a]) 
+   if (teclas[SDL_SCANCODE_A])
    {
       curx--;
    }
-   if (teclas[SDLK_d]) 
+   if (teclas[SDL_SCANCODE_D])
    {
       curx++;
    }
-   
-   if (teclas[SDLK_q])
+
+   if (teclas[SDL_SCANCODE_Q])
    {
     fin=1;
    }
-   if (teclas[SDLK_c])
+   if (teclas[SDL_SCANCODE_C])
    {
     cambiar_camara();
-   }   
-   if (teclas[SDLK_e])
+   }
+   if (teclas[SDL_SCANCODE_E])
    {
         for (int temp=0; temp<uds; temp++)
         {
             ud[temp].ira(rand()%ANCHOX, rand()%ANCHOY);
         }
    }
-   if (teclas[SDLK_r])
+   if (teclas[SDL_SCANCODE_R])
    {
         for (int t=0; t<uds; t++)
         {
@@ -412,7 +405,7 @@ if (teclas[SDLK_ESCAPE]) teclas=0;
             }
         }
    }
-   if (teclas[SDLK_t])
+   if (teclas[SDL_SCANCODE_T])
    {
         for (int t=0; t<uds; t++)
         {
@@ -422,14 +415,10 @@ if (teclas[SDLK_ESCAPE]) teclas=0;
             }
         }
    }
-   if (teclas[SDLK_1])
+   if (teclas[SDL_SCANCODE_1])
    {
         if (ver_memoria==1) {ver_memoria=0;} else {ver_memoria=1;}
    }
-   if (teclas[SDLK_LCTRL]) 
-   {
-   }
-#endif
 
 }
 
@@ -450,7 +439,7 @@ void d_spr_mapa (int x, int y, int tipo) //Dibujo un sprite de mapa en las coord
      }
  }
 
-void d_spr_neco (int x, int y) //Dibujo un sprite de ñeco en (x,y)
+void d_spr_neco (int x, int y) //Dibujo un sprite de ï¿½eco en (x,y)
 {
      if (x<RESX && x>(-65) && y>(-65) && y<RESY)
      {
@@ -569,7 +558,7 @@ void dibujarobjetos ()
              temp2=ud[temp].y+rand()%2-rand()%2;
              if (temp2>0 && temp2<ANCHOY) ud[temp].y=temp2;
          }*/
-         //Dibujar el sprite de selección.
+         //Dibujar el sprite de selecciï¿½n.
          d_spr_sel();
          //Hay que cambiar el 1 por uds
 

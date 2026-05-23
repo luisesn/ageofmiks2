@@ -53,19 +53,17 @@ void inicializar ()
      }
     TTF_Init();
     fuente = TTF_OpenFont( "./tahoma.ttf", 10);
-    pantalla=SDL_SetVideoMode(RESX, RESY, 16,  SDL_HWSURFACE); //SDL_HWSURFACESDL_FULLSCREEN |
+    ventana = SDL_CreateWindow("Age of Miks II",
+                               SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                               RESX, RESY, 0);
+    pantalla = SDL_GetWindowSurface(ventana);
 
-
-Mix_OpenAudio(44100,AUDIO_S16,2,4096);
+Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 4096);
 //musica=Mix_LoadMUS("bsotelecosa.ogg");
 payum=Mix_LoadWAV("phaser.wav");
 //explosion=Mix_LoadWAV("explotanave.wav");
-Mix_VolumeMusic (volumen);
-//Mix_PlayMusic (musica,-1);
-
-#ifdef WIN32
-       SDL_WM_SetCaption("Age of Miks II", NULL);
-#endif
+Mix_VolumeMusic(volumen);
+//Mix_PlayMusic(musica,-1);
        //SDL_ShowCursor (SDL_DISABLE);
        tabla_senoscosenos();
 }

@@ -25,7 +25,8 @@ int mapa[ANCHOX][ANCHOY];
 int obstaculos[ANCHOX][ANCHOY];
 
 
-//Variables de gráficos
+//Variables de grï¿½ficos
+SDL_Window  *ventana  = NULL;
 SDL_Surface *pantalla = NULL;
 //SDL_Joystick *joy = NULL;
 SDL_Surface *spr_mapa=NULL;
@@ -58,17 +59,17 @@ typedef struct def_seleccion
 int fin=1; // Si esta variable==0 se cierra el bucle y se sale del programa
 //int curx=1, cury=1;
 int posx=0, posy=0; // Variables del cursor de texto
-int mousex=RESY/2, mousey=RESX/2; // Posición del ratón dentro de la pantalla 
-int curx=ANCHOX/2, cury=ANCHOY/2; //Posición del cursor en el mapa
+int mousex=RESY/2, mousey=RESX/2; // Posiciï¿½n del ratï¿½n dentro de la pantalla 
+int curx=ANCHOX/2, cury=ANCHOY/2; //Posiciï¿½n del cursor en el mapa
 int scrollx=0, scrolly=0; // Posicion del scroll
 def_seleccion seleccion;
 int seleccionn=0;
-Uint32 tiempo; //Variable para el cálculo de FPSs
-Uint32 fps; //Variable para el cálculo de FPSs
+Uint32 tiempo; //Variable para el cï¿½lculo de FPSs
+Uint32 fps; //Variable para el cï¿½lculo de FPSs
 Uint32 tm_mouseover; //Variable para el scroll
-int camara=1; // Tipo de cámara
+int camara=1; // Tipo de cï¿½mara
 #define DEBUG 1
-//Tabla trionométrica
+//Tabla trionomï¿½trica
 float se[361],co[361];
 int menu=0;
     
