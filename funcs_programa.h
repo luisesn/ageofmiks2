@@ -6,10 +6,14 @@ func_programa.h: Funciones externas al juego
 
 void quitar(void)
 {
-     //fflush(NULL);
-     TTF_CloseFont( fuente );
-     TTF_Quit();
-     fin=0;
+    if (fuente)   { TTF_CloseFont(fuente); fuente = NULL; }
+    if (payum)    { Mix_FreeChunk(payum);  payum  = NULL; }
+    if (musica)   { Mix_FreeMusic(musica); musica = NULL; }
+    if (spr_mapa) { SDL_FreeSurface(spr_mapa); spr_mapa = NULL; }
+    if (spr_gui)  { SDL_FreeSurface(spr_gui);  spr_gui  = NULL; }
+    Mix_CloseAudio();
+    TTF_Quit();
+    if (ventana)  { SDL_DestroyWindow(ventana); ventana = NULL; }
 }
 
 void cargar_sprites()

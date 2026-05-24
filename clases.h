@@ -479,7 +479,8 @@ void dibujar()
         area2.w=64;
         area2.h=64;
         SDL_BlitSurface(spr_mapa, &area1, pantalla, &area2);
-        textprintf(pantalla, fuente,area2.x-32,area2.y,clr_blanco,"(%d) %d.%d.%d.%d (%d.%d,%d.%d)-(%d,%d)",id_jugador,orden.tipo, orden.s,orden.b,orden.o, x,cx, y,  cy,orden.dx(), orden.dy());
+        if (ver_debug_uds)
+            textprintf(pantalla, fuente,area2.x-32,area2.y,clr_blanco,"(%d) %d.%d.%d.%d (%d.%d,%d.%d)-(%d,%d)",id_jugador,orden.tipo, orden.s,orden.b,orden.o, x,cx, y,  cy,orden.dx(), orden.dy());
     }
 }
 void explorar_recursos()

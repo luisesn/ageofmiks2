@@ -417,6 +417,10 @@ if (teclas[SDL_SCANCODE_ESCAPE]) fin=1;
    {
         if (ver_memoria==1) {ver_memoria=0;} else {ver_memoria=1;}
    }
+   if (teclas[SDL_SCANCODE_2])
+   {
+        ver_debug_uds = !ver_debug_uds;
+   }
 
 }
 

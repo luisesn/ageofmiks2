@@ -68,6 +68,7 @@ Uint32 tiempo; //Variable para el c�lculo de FPSs
 Uint32 fps; //Variable para el c�lculo de FPSs
 Uint32 tm_mouseover; //Variable para el scroll
 int camara=1; // Tipo de c�mara
+int ver_debug_uds=0; // Toggle con tecla 2
 #define DEBUG 1
 //Tabla trionom�trica
 float se[361],co[361];
