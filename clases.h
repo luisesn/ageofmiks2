@@ -123,7 +123,7 @@ typedef class tipo_objeto
 public:
     int x,y; //Coordenadas
     int cx;
-    int cy; // ¿Coordenadas dentro de la casilla?
+    int cy; // ï¿½Coordenadas dentro de la casilla?
     int direccion; //Para el sprite
     int ap;
     int tipo; //Tipo de objeto
@@ -134,7 +134,7 @@ public:
     int id_jugador; //A quien pertenece este objeto
     int construido;
 
-    int ptos_resistencia; //Daño recibido por el objeto.
+    int ptos_resistencia; //Daï¿½o recibido por el objeto.
     
     int propiedad_1;
     int propiedad_2;
@@ -145,7 +145,7 @@ void procesar_orden()
 }
 void dibujar()
 {
-    //Posición en la pantalla
+    //Posiciï¿½n en la pantalla
     area2.x=(x - y)*(32) - scrollx; //-32;
     area2.y=(x + y)*(16) - scrolly; //-16;
            
@@ -207,7 +207,7 @@ public:
     int cx;
     int t1;
     int cy;
-    int t2; // ¿Coordenadas dentro de la casilla?
+    int t2; // ï¿½Coordenadas dentro de la casilla?
     int direccion; //Para el sprite
     int ap;
     int tipo; //Tipo de objeto
@@ -223,7 +223,7 @@ public:
     
     int ptos_ataque;
     int ptos_defensa;
-    int ptos_resistencia; //Daño recibido por el objeto.
+    int ptos_resistencia; //Daï¿½o recibido por el objeto.
     
 tipo_unidad()
 {
@@ -298,7 +298,7 @@ void procesar_orden()
                         //Asignamos las coordenadas
                         //Buscamos casa
                         /*
-                        //Habría q buscar el centro de recursos mas cercano.
+                        //Habrï¿½a q buscar el centro de recursos mas cercano.
                         if (obj[temp].jugador==jugador && obj[temp].tipo==0)
                         {
                             orden.destx=obj[temp].x;
@@ -465,7 +465,7 @@ void ira(int curx, int cury)
 void atacar_();
 void dibujar()
 {
-    //Posición en la pantalla
+    //Posiciï¿½n en la pantalla
     area2.x=int ((x - y)*(32) - scrollx+(cx-cy)*32/10); //-32;
     area2.y=int ((x + y)*(16) - scrolly-16+(cx+cy)*16/10); //-16;
     
@@ -680,7 +680,7 @@ void tipo_unidad::atacar_()
             }
         }
     }
-    //No hemos atacado a ninguna así q a explorar
+    //No hemos atacado a ninguna asï¿½ q a explorar
     explorar();
 }
 
@@ -716,7 +716,7 @@ void tipo_unidad::escaner()
 
 void def_memoria::comprobar()
 {
-    for (int j=0; j<100; j++)
+    for (int j=0; j<MAX_MEM; j++)
     {
         if (m[j].activa!=0) 
         {

@@ -27,6 +27,7 @@ void textprintf(SDL_Surface *dest, TTF_Font *fuente, Sint16 x, Sint16 y, SDL_Col
 	vsprintf( bufer , formato , ap );
 	va_end( ap );
 	s = TTF_RenderText_Solid( fuente, bufer, color );
+	if (!s) return;
 	SDL_BlitSurface( s, NULL, dest, &rectDest );
 	SDL_FreeSurface( s );
 }

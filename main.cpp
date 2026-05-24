@@ -90,9 +90,9 @@ int main (int argc, char *argv[])
                 for (int j=0; j<jugadores-1; j++) ia[j].main();      
                           
                 actualizar();
-                //Actualizaci�n s�ncrona
-                fps=int (1000/(SDL_GetTicks()-tiempo));
-         while ((SDL_GetTicks()-tiempo)<(1000/25)) { }
+                Uint32 dt = SDL_GetTicks() - tiempo;
+                fps = (dt > 0) ? 1000 / dt : 999;
+                while ((SDL_GetTicks()-tiempo) < (1000/25)) { }
     }
     quitar();
 }
