@@ -39,21 +39,18 @@ void cargar_mapa()
      #ifdef DEBUG
             printf ("Cargando mapa...");
      #endif
-     char temp; //Variable temporal para guardar los retornos de carro, etc.
+     int c;
      f_mapa = fopen("mapa.txt", "r");
+     if (!f_mapa) { printf("Error: no se pudo abrir mapa.txt\r\n"); return; }
      for (int tempy=0; tempy<ANCHOY; tempy++)
      {
               for (int tempx=0; tempx<ANCHOX; tempx++)
               {
-                      mapa[tempx][tempy]=0; //fgetc(f_mapa)-'0';
-                      #ifdef DEBUG
-                             //printf ("%d,%d --> %d\r\n",tempx,tempy,mapa[tempx][tempy]);
-                      #endif
+                      c = fgetc(f_mapa);
+                      mapa[tempx][tempy] = (c != EOF) ? c - '0' : 0;
               }
-              temp=fgetc(f_mapa);
-              #ifdef GP2X
-                     temp=fgetc(f_mapa); //Recojo el retorno de carro y la nueva linea.
-              #endif
+              // Consumir fin de linea (soporta \r\n y \n)
+              while ((c = fgetc(f_mapa)) != EOF && c != '\n') {}
      }
      fclose(f_mapa);
      #ifdef DEBUG
@@ -208,6 +205,7 @@ int construir_objeto(int x, int y, int tipo, int id_jugador)
     obj[objn].x=x;
     obj[objn].y=y;
     obj[objn].propiedad_1=10000;
+    return objn;
 }
 
 void crear_objetos()
@@ -235,7 +233,7 @@ void vteclas()
 SDL_Event event;
 int temp;
 
-if (SDL_PollEvent (&event))
+while (SDL_PollEvent (&event))
 {
     switch (event.type)
     {

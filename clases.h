@@ -668,9 +668,10 @@ void tipo_unidad::atacar_()
                 jugador[id_jugador].mem.anadir(x,y, j, MEMORIA_UNIDAD_ENEMIGA);
                 if (dst<2)
                 {
-                    //Esta forma de quitar puntos no es correcta si la defensa>ataque ...
-                    ud[j].ptos_resistencia-=abs(ptos_ataque-ud[j].ptos_defensa);
-                    ptos_resistencia-=abs(ud[j].ptos_ataque-ptos_defensa);
+                    int dano_a = ptos_ataque - ud[j].ptos_defensa;
+                    int dano_b = ud[j].ptos_ataque - ptos_defensa;
+                    ud[j].ptos_resistencia -= (dano_a > 1) ? dano_a : 1;
+                    ptos_resistencia       -= (dano_b > 1) ? dano_b : 1;
                     ud[j].sprite=2;
                     sprite=2;
                     Mix_PlayChannel(-1,payum,0);
