@@ -141,8 +141,9 @@ void actualizar ()
     {
         if (ud[j].activa()) u[ud[j].id_jugador]++;
     }
-    textprintf(pantalla, fuente,0,0,clr_blanco,"CAM:%d FPS: %d �Sel?: %d Mouse:%d(%d),%d(%d) Scroll:%d,%d",camara, fps, seleccion.n, mousex, curx, mousey, cury,scrollx, scrolly);
-    textprintf(pantalla, fuente,0,14,clr_blanco,"%d %d %d %d %d %d %d",u[0], u[1], u[2], u[3], u[4], u[5], u[6]);
+    textprintf(pantalla, fuente,0,0,clr_blanco,"CAM:%d FPS:%d  Recursos:%d  Sel:%d  [1=mem 2=debug]",
+        camara, fps, jugador[JUGADOR_LOCAL].numero_recursos(), seleccion.n);
+    textprintf(pantalla, fuente,0,14,clr_blanco,"Uds  P0:%d P1:%d P2:%d P3:%d",u[0], u[1], u[2], u[3]);
     if (ver_memoria==1)
     for (int i=1; i<jugadores; i++)
     {

@@ -64,6 +64,15 @@ int main (int argc, char *argv[])
                             } else {
                                 tm_mouseover=99999;
                             }
+                            // Limitar scroll a los bordes del mapa isometrico
+                            { const int SX_MIN = -(ANCHOY-1)*32;
+                              const int SX_MAX =  (ANCHOX-1)*32 - RESX;
+                              const int SY_MIN = -32;
+                              const int SY_MAX = ((ANCHOX-1)+(ANCHOY-1))*16 - RESY;
+                              if (scrollx < SX_MIN) scrollx = SX_MIN;
+                              if (scrollx > SX_MAX) scrollx = SX_MAX;
+                              if (scrolly < SY_MIN) scrolly = SY_MIN;
+                              if (scrolly > SY_MAX) scrolly = SY_MAX; }
                             break;
                        case 0: //Camara sigue a cursor
                             scrollx =(curx - cury)*( 64 /2)-RESX/2;
