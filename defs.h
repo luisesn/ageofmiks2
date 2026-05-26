@@ -23,6 +23,7 @@ defs.h: Definiciones y variables principales del programa
 FILE *f_mapa;
 int mapa[ANCHOX][ANCHOY];
 int obstaculos[ANCHOX][ANCHOY];
+int ocupacion_uds[ANCHOX][ANCHOY];
 
 
 //Variables de gr�ficos
@@ -85,6 +86,7 @@ int cfg_ataque_aldeano=10;
 int cfg_ataque_soldado=50;
 int cfg_defensa_aldeano=2;
 int cfg_defensa_soldado=4;
+int cfg_precio_centro=400;
     
 //Variables del usuario
 char usuario[254]="\0";

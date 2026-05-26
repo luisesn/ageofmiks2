@@ -65,6 +65,7 @@ static void actualizar_simulacion(double &ang)
     ang=ang+3.1415/90;
 
     actualizar_camara();
+    actualizar_ocupacion_uds();
     actualizar_uds();
     for (int j=0; j<jugadores-1; j++) ia[j].main();
 }

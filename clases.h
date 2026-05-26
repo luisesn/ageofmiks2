@@ -540,6 +540,7 @@ int casilla_transitable(int nx, int ny)
 {
     if (nx < 0 || nx >= ANCHOX || ny < 0 || ny >= ANCHOY) return 0;
     if (obstaculos[nx][ny] != 0) return 0;
+    if (ocupacion_uds[nx][ny] > 0 && !(nx == x && ny == y)) return 0;
 
     for (int j=0; j<uds; j++)
     {

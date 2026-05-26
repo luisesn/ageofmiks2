@@ -159,6 +159,8 @@ y establece `cwd` a `${workspaceFolder}` para que los assets se encuentren.
 - Movimiento de unidades con verificacion de casillas transitables frente a obstaculos y objetos construidos.
 - Balance basico configurable en runtime mediante `balance.cfg` (costes y stats principales de aldeanos/soldados).
 - Integracion de pathfinding A* basico (4 direcciones) para calcular el siguiente paso de movimiento.
+- Integrada ocupacion dinamica de unidades por frame para evitar pisado de casillas en movimiento.
+- Construccion basica de centros jugable con click derecho (sin seleccion), validacion de casilla y coste configurable (`precio_centro`).
 
 ### Progreso de implementacion (items 1-10)
 
@@ -171,7 +173,7 @@ y establece `cwd` a `${workspaceFolder}` para que los assets se encuentren.
 - [ ] 7. Niebla de guerra visual
 - [~] 8. Sistema de obstaculos/ocupacion (integrado en movimiento contra obstaculos/objetos, falta ocupacion por unidades y resolucion de atascos)
 - [~] 9. Balance data-driven (capa inicial con `balance.cfg`, falta cubrir mas tipos/unidades/edificios)
-- [ ] 10. Construccion de edificios jugable
+- [~] 10. Construccion de edificios jugable (fase inicial: centro con coste/validacion, faltan GUI/colas/tipos)
 
 ---
 

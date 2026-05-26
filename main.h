@@ -197,8 +197,48 @@ void actualizar_uds()
     }
 }
 
+void actualizar_ocupacion_uds()
+{
+    for (int y=0; y<ANCHOY; y++)
+    {
+        for (int x=0; x<ANCHOX; x++)
+        {
+            ocupacion_uds[x][y]=0;
+        }
+    }
+
+    for (int j=0; j<uds; j++)
+    {
+        if (ud[j].activa() && ud[j].x>=0 && ud[j].x<ANCHOX && ud[j].y>=0 && ud[j].y<ANCHOY)
+        {
+            ocupacion_uds[ud[j].x][ud[j].y]++;
+        }
+    }
+}
+
+int casilla_construible(int x, int y)
+{
+    if (x<0 || x>=ANCHOX || y<0 || y>=ANCHOY) return 0;
+    if (obstaculos[x][y] != 0) return 0;
+    if (ocupacion_uds[x][y] > 0) return 0;
+
+    for (int j=0; j<uds; j++)
+    {
+        if (obj[j].construido && obj[j].x==x && obj[j].y==y) return 0;
+    }
+
+    return 1;
+}
+
 int construir_objeto(int x, int y, int tipo, int id_jugador)
 {
+    if (!casilla_construible(x, y)) return -1;
+
+    if (tipo==OBJ_TIPO_CENTRO && id_jugador>=0)
+    {
+        if (jugador[id_jugador].quitar_recursos(cfg_precio_centro)!=1) return -1;
+    }
+
     int objn=-1;
     for (int temp=0; temp<uds; temp++)
     {
@@ -339,7 +379,7 @@ while (SDL_PollEvent (&event))
                                     break;
                             }
                         } else {
-                            construir_objeto(curx, cury,0 ,1);
+                            construir_objeto(curx, cury, OBJ_TIPO_CENTRO, JUGADOR_LOCAL);
                         }
                    }
             }
