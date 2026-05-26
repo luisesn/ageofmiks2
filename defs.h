@@ -73,6 +73,18 @@ int ver_debug_uds=0; // Toggle con tecla 2
 //Tabla trionom�trica
 float se[361],co[361];
 int menu=0;
+
+// Configuracion de balance (cargable desde balance.cfg)
+int cfg_precio_aldeano=50;
+int cfg_precio_soldado=100;
+int cfg_alcance_aldeano=3;
+int cfg_alcance_soldado=6;
+int cfg_resistencia_aldeano=100;
+int cfg_resistencia_soldado=200;
+int cfg_ataque_aldeano=10;
+int cfg_ataque_soldado=50;
+int cfg_defensa_aldeano=2;
+int cfg_defensa_soldado=4;
     
 //Variables del usuario
 char usuario[254]="\0";

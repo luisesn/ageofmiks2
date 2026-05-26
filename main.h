@@ -71,22 +71,22 @@ int unidad_vacia()
 int crear_aldeano(int id_p)
 {
     int id=-1;
-    if (jugador[id_p].quitar_recursos(UD_PRECIO_ALDEANO))
+    if (jugador[id_p].quitar_recursos(cfg_precio_aldeano))
     {
         id=unidad_vacia();
         if (id!=-1)
         {
-            ud[id].ptos_resistencia=RESISTENCIA_ALDEANO;
+            ud[id].ptos_resistencia=cfg_resistencia_aldeano;
             ud[id].x=obj[jugador[id_p].objeto_centro].x+1;
             ud[id].y=obj[jugador[id_p].objeto_centro].y+1;
             ud[id].cx=5;
             ud[id].cy=5;
             ud[id].tipo=UD_TIPO_ALDEANO;
-            ud[id].alcance_vision=ALCANCE_ALDEANO;
+            ud[id].alcance_vision=cfg_alcance_aldeano;
             ud[id].actitud=ACTITUD_PASIVA;
             ud[id].id_jugador=id_p;
-            ud[id].ptos_ataque=ATAQUE_ALDEANO;
-            ud[id].ptos_defensa=DEFENSA_ALDEANO;
+            ud[id].ptos_ataque=cfg_ataque_aldeano;
+            ud[id].ptos_defensa=cfg_defensa_aldeano;
             return id;
         }
     }
@@ -96,20 +96,20 @@ int crear_aldeano(int id_p)
 int crear_soldado(int id_p)
 {
     int id=-1;
-    if (jugador[id_p].quitar_recursos(UD_PRECIO_SOLDADO))
+    if (jugador[id_p].quitar_recursos(cfg_precio_soldado))
     {
         id=unidad_vacia();
         if (id!=-1)
         {
-            ud[id].ptos_resistencia=RESISTENCIA_SOLDADO;
+            ud[id].ptos_resistencia=cfg_resistencia_soldado;
             ud[id].x=obj[jugador[id_p].objeto_centro].x+1;
             ud[id].y=obj[jugador[id_p].objeto_centro].y+1;
             ud[id].tipo=UD_TIPO_SOLDADO;
-            ud[id].alcance_vision=ALCANCE_SOLDADO;
+            ud[id].alcance_vision=cfg_alcance_soldado;
             ud[id].actitud=ACTITUD_AGRESIVA;
             ud[id].id_jugador=id_p;
-            ud[id].ptos_ataque=ATAQUE_SOLDADO;
-            ud[id].ptos_defensa=DEFENSA_SOLDADO;
+            ud[id].ptos_ataque=cfg_ataque_soldado;
+            ud[id].ptos_defensa=cfg_defensa_soldado;
             return id;
         }
     }

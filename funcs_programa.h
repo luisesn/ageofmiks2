@@ -4,6 +4,35 @@ Age of miks 2
 func_programa.h: Funciones externas al juego
 *************************************************************/
 
+void cargar_balance()
+{
+    FILE *f = fopen("balance.cfg", "r");
+    if (!f) return;
+
+    char linea[256];
+    char clave[128];
+    int valor = 0;
+
+    while (fgets(linea, sizeof(linea), f))
+    {
+        if (linea[0] == '#' || linea[0] == '\n' || linea[0] == '\r') continue;
+        if (sscanf(linea, " %127[^=]=%d", clave, &valor) != 2) continue;
+
+        if (strcmp(clave, "precio_aldeano") == 0) cfg_precio_aldeano = valor;
+        else if (strcmp(clave, "precio_soldado") == 0) cfg_precio_soldado = valor;
+        else if (strcmp(clave, "alcance_aldeano") == 0) cfg_alcance_aldeano = valor;
+        else if (strcmp(clave, "alcance_soldado") == 0) cfg_alcance_soldado = valor;
+        else if (strcmp(clave, "resistencia_aldeano") == 0) cfg_resistencia_aldeano = valor;
+        else if (strcmp(clave, "resistencia_soldado") == 0) cfg_resistencia_soldado = valor;
+        else if (strcmp(clave, "ataque_aldeano") == 0) cfg_ataque_aldeano = valor;
+        else if (strcmp(clave, "ataque_soldado") == 0) cfg_ataque_soldado = valor;
+        else if (strcmp(clave, "defensa_aldeano") == 0) cfg_defensa_aldeano = valor;
+        else if (strcmp(clave, "defensa_soldado") == 0) cfg_defensa_soldado = valor;
+    }
+
+    fclose(f);
+}
+
 void quitar(void)
 {
     if (fuente)   { TTF_CloseFont(fuente); fuente = NULL; }
@@ -69,6 +98,7 @@ payum=Mix_LoadWAV("phaser.wav");
 Mix_VolumeMusic(volumen);
 //Mix_PlayMusic(musica,-1);
        //SDL_ShowCursor (SDL_DISABLE);
+    cargar_balance();
        tabla_senoscosenos();
 }
 

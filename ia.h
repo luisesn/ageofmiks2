@@ -207,10 +207,10 @@ void main()
     recursos=jugador[id_jugador].numero_recursos();
 
     //
-    if (aldeanos>0 || recursos>UD_PRECIO_ALDEANO)
+    if (aldeanos>0 || recursos>cfg_precio_aldeano)
     {
         //Conseguir recursos "minimo"
-        if (aldeanos<unidades_minimas_recogiendo && recursos>UD_PRECIO_ALDEANO)
+        if (aldeanos<unidades_minimas_recogiendo && recursos>cfg_precio_aldeano)
         {
             //Hay que mejorar la busqueda, no todos los aldeanos tienen que estar recogiendo.
             //Crear un aldeano.
@@ -223,13 +223,13 @@ void main()
         //
         if (jugador[id_jugador].seleccion!=-1)
         {
-            //Hay un aldeano libre, pongámoslo a buscar recursos.
+            //Hay un aldeano libre, pongï¿½moslo a buscar recursos.
             //printf("Aldeano libre.\r\n");
             ud[jugador[id_jugador].seleccion].explorar_recursos();
             printf ("[%d] Encontrado aldeano libre %d, asignado.\r\n", id_jugador,jugador[id_jugador].seleccion);
         } else {
-            //No hay ningún aldeano libre
-            //printf("No hay ningún aldeano libre.\r\n");
+            //No hay ningï¿½n aldeano libre
+            //printf("No hay ningï¿½n aldeano libre.\r\n");
         }
 
         //Estrategia de defensa
@@ -278,7 +278,7 @@ void main()
         //Estrategia de ataque
         if (recursos>recursos_minimos_ataque)
         {
-            //Construcción de uds. de ataque
+            //Construcciï¿½n de uds. de ataque
             if (soldados<unidades_minimas_ataque && recursos>UD_PRECIO_SOLDADO)
             {
                     t=crear_soldado(id_jugador);
@@ -356,7 +356,7 @@ void main()
         }
 
     } else {
-        //Si no hay aldeanos... última estrategia...
+        //Si no hay aldeanos... ï¿½ltima estrategia...
     }
 }
 
