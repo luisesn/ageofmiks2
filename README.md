@@ -20,6 +20,7 @@ Proyecto retomado y migrado a un toolchain moderno (SDL2 + CMake + MSYS2).
 | Click izquierdo | Seleccionar unidad u objeto |
 | Click derecho | Ordenar movimiento (unidad seleccionada) / construir |
 | Click izquierdo en barra (botones 2/3) | Cambiar modo de construccion (centro/almacen) |
+| Click izquierdo en minimapa | Mover cámara a la zona clicada |
 | `W A S D` | Mover cursor isométrico |
 | `C` | Cambiar modo de cámara (libre / cursor / objeto / unidad) |
 | `R` | Poner aldeanos a recoger recursos |
@@ -182,6 +183,7 @@ y establece `cwd` a `${workspaceFolder}` para que los assets se encuentren.
 - Migracion adicional a `GameState`: cursor y mouse sincronizados como parte del estado runtime.
 - Comando explicito de cancelacion por unidad (`CMD_TIPO_CANCELAR_UNIDAD`, tecla `X`).
 - Pequena optimizacion de niebla: overlay reutilizable (`spr_fog`) para reducir trabajo por tile.
+- Minimap funcional en pantalla con terreno, unidades, objetos y rectangulo de camara; soporta click para centrar camara.
 
 ### Progreso de implementacion (items 1-10)
 

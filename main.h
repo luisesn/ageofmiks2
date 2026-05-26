@@ -478,6 +478,10 @@ void crear_objetos()
 }
 
 
+int minimapa_contiene(int mx, int my);
+void minimapa_mover_camara(int mx, int my);
+
+
 
 void vteclas()
 {
@@ -530,6 +534,11 @@ while (SDL_PollEvent (&event))
             //If the left mouse button was pressed
             if (event.button.button == SDL_BUTTON_LEFT )
             {
+                    if (minimapa_contiene(mousex, mousey))
+                    {
+                        minimapa_mover_camara(mousex, mousey);
+                        break;
+                    }
                     if (mousey>32) //No estamos pulsando sobre la barra
                     {
                         seleccion.n=-1;
@@ -869,4 +878,138 @@ void dibujarobjetos ()
 
          //Dibuja el tile en la pantalla
          //d_spr_neco(px, py);
+}
+
+int minimapa_scale() { return 2; }
+int minimapa_w() { return ANCHOX * minimapa_scale(); }
+int minimapa_h() { return ANCHOY * minimapa_scale(); }
+int minimapa_x() { return RESX - minimapa_w() - 8; }
+int minimapa_y() { return RESY - minimapa_h() - 8; }
+
+int minimapa_contiene(int mx, int my)
+{
+    return (mx>=minimapa_x() && mx<minimapa_x()+minimapa_w() && my>=minimapa_y() && my<minimapa_y()+minimapa_h());
+}
+
+void limitar_scroll_mapa()
+{
+    const int SX_MIN = -(ANCHOY-1)*32;
+    const int SX_MAX =  (ANCHOX-1)*32 - RESX;
+    const int SY_MIN = -32;
+    const int SY_MAX = ((ANCHOX-1)+(ANCHOY-1))*16 - RESY;
+    if (scrollx < SX_MIN) scrollx = SX_MIN;
+    if (scrollx > SX_MAX) scrollx = SX_MAX;
+    if (scrolly < SY_MIN) scrolly = SY_MIN;
+    if (scrolly > SY_MAX) scrolly = SY_MAX;
+}
+
+void minimapa_mover_camara(int mx, int my)
+{
+    int s = minimapa_scale();
+    int mapx = (mx - minimapa_x()) / s;
+    int mapy = (my - minimapa_y()) / s;
+    if (mapx<0) mapx=0; if (mapx>=ANCHOX) mapx=ANCHOX-1;
+    if (mapy<0) mapy=0; if (mapy>=ANCHOY) mapy=ANCHOY-1;
+
+    scrollx = (mapx - mapy)*32 - RESX/2;
+    scrolly = (mapx + mapy)*16 - RESY/2;
+    limitar_scroll_mapa();
+}
+
+void minimapa_render()
+{
+    int mmx = minimapa_x();
+    int mmy = minimapa_y();
+    int s = minimapa_scale();
+
+    SDL_Rect bg;
+    bg.x = mmx-2;
+    bg.y = mmy-2;
+    bg.w = minimapa_w()+4;
+    bg.h = minimapa_h()+4;
+    SDL_FillRect(pantalla, &bg, SDL_MapRGB(pantalla->format, 8, 8, 8));
+
+    for (int y=0; y<ANCHOY; y++)
+    {
+        for (int x=0; x<ANCHOX; x++)
+        {
+            SDL_Rect p;
+            p.x = mmx + x*s;
+            p.y = mmy + y*s;
+            p.w = s;
+            p.h = s;
+
+            Uint32 color = SDL_MapRGB(pantalla->format, 20, 80, 20);
+            switch (mapa[x][y])
+            {
+                case 0: color = SDL_MapRGB(pantalla->format, 26, 96, 26); break;
+                case 1: color = SDL_MapRGB(pantalla->format, 80, 80, 80); break;
+                case 2: color = SDL_MapRGB(pantalla->format, 160, 130, 90); break;
+                case 3: color = SDL_MapRGB(pantalla->format, 36, 120, 36); break;
+                case 4: color = SDL_MapRGB(pantalla->format, 24, 90, 140); break;
+                case 5: color = SDL_MapRGB(pantalla->format, 120, 120, 40); break;
+                default: break;
+            }
+            SDL_FillRect(pantalla, &p, color);
+        }
+    }
+
+    for (int j=0; j<uds; j++)
+    {
+        if (!obj[j].construido) continue;
+        SDL_Rect p;
+        p.x = mmx + obj[j].x*s;
+        p.y = mmy + obj[j].y*s;
+        p.w = s;
+        p.h = s;
+        Uint32 cobj = (obj[j].id_jugador==JUGADOR_LOCAL)
+            ? SDL_MapRGB(pantalla->format, 255, 255, 0)
+            : SDL_MapRGB(pantalla->format, 180, 120, 0);
+        SDL_FillRect(pantalla, &p, cobj);
+    }
+
+    for (int j=0; j<uds; j++)
+    {
+        if (!ud[j].activa()) continue;
+        SDL_Rect p;
+        p.x = mmx + ud[j].x*s;
+        p.y = mmy + ud[j].y*s;
+        p.w = s;
+        p.h = s;
+        Uint32 cud = SDL_MapRGB(pantalla->format, 255, 0, 0);
+        if (ud[j].id_jugador==0) cud = SDL_MapRGB(pantalla->format, 0, 255, 255);
+        if (ud[j].id_jugador==1) cud = SDL_MapRGB(pantalla->format, 255, 80, 80);
+        if (ud[j].id_jugador==2) cud = SDL_MapRGB(pantalla->format, 80, 255, 80);
+        if (ud[j].id_jugador==3) cud = SDL_MapRGB(pantalla->format, 255, 180, 80);
+        SDL_FillRect(pantalla, &p, cud);
+    }
+
+    // Rectangulo de camara aproximado usando las 4 esquinas de pantalla.
+    const int sx[4] = {0, RESX-1, 0, RESX-1};
+    const int sy[4] = {32, 32, RESY-1, RESY-1};
+    float minx=99999.0f, miny=99999.0f, maxx=-99999.0f, maxy=-99999.0f;
+    for (int i=0; i<4; i++)
+    {
+        float px = (float)(sx[i] + scrollx);
+        float py = (float)(sy[i] + scrolly);
+        float mx = px/64.0f + py/32.0f;
+        float my = py/32.0f - px/64.0f;
+        if (mx < minx) minx = mx;
+        if (mx > maxx) maxx = mx;
+        if (my < miny) miny = my;
+        if (my > maxy) maxy = my;
+    }
+
+    int rx = mmx + (int)(minx * s);
+    int ry = mmy + (int)(miny * s);
+    int rw = (int)((maxx-minx) * s);
+    int rh = (int)((maxy-miny) * s);
+    if (rw<2) rw=2;
+    if (rh<2) rh=2;
+    SDL_Rect cam;
+    cam.x = rx;
+    cam.y = ry;
+    cam.w = rw;
+    cam.h = rh;
+    SDL_FillRect(pantalla, &cam, SDL_MapRGB(pantalla->format, 255, 255, 255));
 }

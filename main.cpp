@@ -81,6 +81,7 @@ static void renderizar_frame()
     dibujarobjetos();
     d_spr_cursor();
     gui();
+    minimapa_render();
     actualizar();
 }
 
