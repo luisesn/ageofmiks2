@@ -273,6 +273,19 @@ void command_process_queue()
 
 void actualizar_niebla_local()
 {
+    if (!cfg_fog_habilitada)
+    {
+        for (int y=0; y<ANCHOY; y++)
+        {
+            for (int x=0; x<ANCHOX; x++)
+            {
+                vis_actual[x][y]=1;
+                vis_explorado[x][y]=1;
+            }
+        }
+        return;
+    }
+
     for (int y=0; y<ANCHOY; y++)
     {
         for (int x=0; x<ANCHOX; x++)

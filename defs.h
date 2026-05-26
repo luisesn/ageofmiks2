@@ -94,6 +94,7 @@ int cfg_precio_almacen=250;
 int cfg_ingreso_almacen=2;
 int cfg_ia_objetivo_almacenes=3;
 int cfg_ia_recursos_min_ataque=200;
+int cfg_fog_habilitada=0;
 
 // Tipo de edificio a construir al hacer click derecho sin seleccion
 int modo_construccion_tipo=0;
