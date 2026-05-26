@@ -8,6 +8,8 @@ main.cpp: archivo principal
 
 static const Uint32 TARGET_FPS = 25;
 static const Uint32 TARGET_FRAME_MS = 1000 / TARGET_FPS;
+static const Uint32 MAX_FRAME_DELTA_MS = 250;
+static const int MAX_UPDATES_PER_FRAME = 5;
 
 static void actualizar_camara()
 {
@@ -110,19 +112,47 @@ int main (int argc, char *argv[])
     vteclas();
     fin=0;
 
+    Uint32 previous_ticks = SDL_GetTicks();
+    Uint32 accumulator_ms = 0;
+
     while(!fin)
     {
-        tiempo=SDL_GetTicks();
+        Uint32 frame_start = SDL_GetTicks();
+        Uint32 frame_delta = frame_start - previous_ticks;
+        previous_ticks = frame_start;
+
+        if (frame_delta > MAX_FRAME_DELTA_MS)
+        {
+            frame_delta = MAX_FRAME_DELTA_MS;
+        }
+
+        accumulator_ms += frame_delta;
 
         vteclas();
-        actualizar_simulacion(ang);
+
+        int updates_this_frame = 0;
+        while (accumulator_ms >= TARGET_FRAME_MS && updates_this_frame < MAX_UPDATES_PER_FRAME)
+        {
+            actualizar_simulacion(ang);
+            accumulator_ms -= TARGET_FRAME_MS;
+            updates_this_frame++;
+        }
+
+        // Si hubo demasiado retraso, descartamos el sobrante para evitar espiral de muerte.
+        if (updates_this_frame == MAX_UPDATES_PER_FRAME && accumulator_ms >= TARGET_FRAME_MS)
+        {
+            accumulator_ms = 0;
+        }
+
         renderizar_frame();
 
-        Uint32 dt = SDL_GetTicks() - tiempo;
-        fps = (dt > 0) ? 1000 / dt : 999;
-        if (dt < TARGET_FRAME_MS)
+        Uint32 frame_time = SDL_GetTicks() - frame_start;
+        tiempo = frame_time;
+        fps = (frame_time > 0) ? 1000 / frame_time : 999;
+
+        if (frame_time < TARGET_FRAME_MS)
         {
-            SDL_Delay(TARGET_FRAME_MS - dt);
+            SDL_Delay(TARGET_FRAME_MS - frame_time);
         }
     }
     quitar();

@@ -165,12 +165,13 @@ y establece `cwd` a `${workspaceFolder}` para que los assets se encuentren.
 - Construccion basica de centros jugable con click derecho (sin seleccion), validacion de casilla y coste configurable (`precio_centro`).
 - Fallback de desbloqueo local cuando A* queda temporalmente bloqueado por ocupacion dinamica.
 - Nuevo edificio jugable `almacen` con ingreso periodico de recursos y coste configurable (`precio_almacen`, `ingreso_almacen`).
+- Loop principal con timestep fijo por acumulador y limite de catch-up para evitar picos/espiral de actualizaciones.
 
 ### Progreso de implementacion (items 1-10)
 
 - [x] 1. Frame pacing sin busy wait
 - [~] 2. Pathfinding A* (implementacion base activa, faltan optimizaciones/caching y resolucion de bloqueos dinamicos)
-- [~] 3. Separar simulacion y render (fase inicial hecha, falta timestep fijo)
+- [x] 3. Separar simulacion y render (incluye timestep fijo con acumulador)
 - [ ] 4. Migrar globales a `GameState`
 - [ ] 5. Sistema de comandos desacoplado
 - [ ] 6. Reestructura de IA (behavior tree/utility)
