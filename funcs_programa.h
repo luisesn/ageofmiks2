@@ -45,6 +45,7 @@ void quitar(void)
     if (musica)   { Mix_FreeMusic(musica); musica = NULL; }
     if (spr_mapa) { SDL_FreeSurface(spr_mapa); spr_mapa = NULL; }
     if (spr_gui)  { SDL_FreeSurface(spr_gui);  spr_gui  = NULL; }
+    if (spr_fog)  { SDL_FreeSurface(spr_fog);  spr_fog  = NULL; }
     Mix_CloseAudio();
     TTF_Quit();
     if (ventana)  { SDL_DestroyWindow(ventana); ventana = NULL; }
@@ -95,6 +96,9 @@ void inicializar ()
                                SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                RESX, RESY, 0);
     pantalla = SDL_GetWindowSurface(ventana);
+    spr_fog = SDL_CreateRGBSurface(0, 48, 48, 32,
+                                   0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
+    if (spr_fog) SDL_FillRect(spr_fog, NULL, SDL_MapRGB(spr_fog->format, 16, 16, 16));
 
 Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 4096);
 //musica=Mix_LoadMUS("bsotelecosa.ogg");

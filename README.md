@@ -181,6 +181,7 @@ y establece `cwd` a `${workspaceFolder}` para que los assets se encuentren.
 - Camara principal del loop usando `GameState` como fuente primaria.
 - Migracion adicional a `GameState`: cursor y mouse sincronizados como parte del estado runtime.
 - Comando explicito de cancelacion por unidad (`CMD_TIPO_CANCELAR_UNIDAD`, tecla `X`).
+- Pequena optimizacion de niebla: overlay reutilizable (`spr_fog`) para reducir trabajo por tile.
 
 ### Progreso de implementacion (items 1-10)
 

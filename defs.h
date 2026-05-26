@@ -34,6 +34,7 @@ SDL_Surface *pantalla = NULL;
 //SDL_Joystick *joy = NULL;
 SDL_Surface *spr_mapa=NULL;
 SDL_Surface *spr_gui=NULL;
+SDL_Surface *spr_fog=NULL;
 //Para el dibujo
 SDL_Rect area1;
 SDL_Rect area2;

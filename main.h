@@ -820,8 +820,15 @@ void dibujarmapa () {
                 fog_rect.h = 48;
                 if (fog_rect.x < RESX && fog_rect.y < RESY && fog_rect.x + fog_rect.w > 0 && fog_rect.y + fog_rect.h > 0)
                 {
-                    Uint32 fog_color = SDL_MapRGB(pantalla->format, 16, 16, 16);
-                    SDL_FillRect(pantalla, &fog_rect, fog_color);
+                    if (spr_fog)
+                    {
+                        SDL_BlitSurface(spr_fog, NULL, pantalla, &fog_rect);
+                    }
+                    else
+                    {
+                        Uint32 fog_color = SDL_MapRGB(pantalla->format, 16, 16, 16);
+                        SDL_FillRect(pantalla, &fog_rect, fog_color);
+                    }
                 }
             }
 		}
