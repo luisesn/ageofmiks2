@@ -48,6 +48,7 @@ void cargar_mapa()
               {
                       c = fgetc(f_mapa);
                       mapa[tempx][tempy] = (c != EOF) ? c - '0' : 0;
+                  obstaculos[tempx][tempy] = 0;
               }
               // Consumir fin de linea (soporta \r\n y \n)
               while ((c = fgetc(f_mapa)) != EOF && c != '\n') {}

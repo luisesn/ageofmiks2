@@ -536,6 +536,19 @@ void patrullar(int objeto)
     orden.o=objeto;
 }
 private:
+int casilla_transitable(int nx, int ny)
+{
+    if (nx < 0 || nx >= ANCHOX || ny < 0 || ny >= ANCHOY) return 0;
+    if (obstaculos[nx][ny] != 0) return 0;
+
+    for (int j=0; j<uds; j++)
+    {
+        if (obj[j].construido && obj[j].x == nx && obj[j].y == ny) return 0;
+    }
+
+    return 1;
+}
+
 void mover()
 {
     int dx, dy;
@@ -584,7 +597,7 @@ void arriba()
    { 
         cy=cy-1;
    } else {
-        if (y>0) 
+       if (y>0 && casilla_transitable(x, y-1)) 
         { 
           //if (x>0) x--;
           y--;
@@ -603,7 +616,7 @@ void abajo()
         cy=cy+1;
    } else {
    
-        if (y<ANCHOY) 
+       if (y<ANCHOY-1 && casilla_transitable(x, y+1)) 
         { 
           //if (x<ANCHOX) x++;
           y++;
@@ -620,7 +633,7 @@ void izda()
         cx--;
    } else {
 
-        if (x>0) 
+       if (x>0 && casilla_transitable(x-1, y)) 
         { 
           //if (y<ANCHOY) y++;
           x--;
@@ -640,7 +653,7 @@ void dcha()
     }
     else 
     {
-        if (x<ANCHOX) 
+                if (x<ANCHOX-1 && casilla_transitable(x+1, y)) 
         { 
           //if (y>0) y--;
           x++;

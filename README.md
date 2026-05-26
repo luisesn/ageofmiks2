@@ -155,6 +155,8 @@ y establece `cwd` a `${workspaceFolder}` para que los assets se encuentren.
 - Loop principal refactorizado para eliminar espera activa (`busy wait`) y usar `SDL_Delay` para limitar FPS.
 - Separacion inicial entre simulacion y renderizado en `main.cpp` (`actualizar_simulacion` y `renderizar_frame`).
 - Credenciales hardcodeadas eliminadas de `defs.h` (usuario/password quedan vacios por defecto).
+- Inicializacion explicita de `obstaculos[][]` durante la carga de mapa.
+- Movimiento de unidades con verificacion de casillas transitables frente a obstaculos y objetos construidos.
 
 ### Progreso de implementacion (items 1-10)
 
@@ -165,7 +167,7 @@ y establece `cwd` a `${workspaceFolder}` para que los assets se encuentren.
 - [ ] 5. Sistema de comandos desacoplado
 - [ ] 6. Reestructura de IA (behavior tree/utility)
 - [ ] 7. Niebla de guerra visual
-- [~] 8. Sistema de obstaculos/ocupacion (estructura existe, falta integrar en movimiento)
+- [~] 8. Sistema de obstaculos/ocupacion (integrado en movimiento contra obstaculos/objetos, falta ocupacion por unidades y resolucion de atascos)
 - [ ] 9. Balance data-driven (archivos externos)
 - [ ] 10. Construccion de edificios jugable
 
