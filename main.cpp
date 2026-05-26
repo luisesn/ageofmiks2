@@ -13,7 +13,7 @@ static const int MAX_UPDATES_PER_FRAME = 5;
 
 static void actualizar_camara()
 {
-    switch (camara)
+    switch (game_state.camera_mode)
     {
         case 1: // Camara libre
             if ((mousex>RESX-RESX/20) || (mousey>RESY-RESY/20) || (mousey>32 && mousex<RESX/20 ) || (mousey>32 && mousey<32+(RESY/20)))
@@ -95,6 +95,8 @@ int main (int argc, char *argv[])
     game_state.running=1;
     game_state.camera_mode=1;
     game_state.build_mode=OBJ_TIPO_CENTRO;
+    game_state.selected_id=-1;
+    game_state.selected_type=0;
     gs_apply_to_globals();
     seleccionn=2;
     atexit (SDL_Quit);
@@ -107,6 +109,8 @@ int main (int argc, char *argv[])
     game_state.running=1;
     gs_apply_to_globals();
     seleccion.n=-1;
+    seleccion.tipo=0;
+    gs_sync_from_globals();
 
     jugadores_configurar();
     for (int j=0; j<jugadores-1; j++) ia[j].configurar(j+1);

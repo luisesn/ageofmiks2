@@ -177,13 +177,14 @@ y establece `cwd` a `${workspaceFolder}` para que los assets se encuentren.
 - IA parametrizable desde `balance.cfg` para expansion/economia (`ia_objetivo_almacenes`, `ia_recursos_min_ataque`).
 - Niebla parcial mejorada: tiles explorados pero no visibles se oscurecen en lugar de ocultarse por completo.
 - Migracion adicional a `GameState`: seleccion activa integrada en el estado de juego.
+- Camara principal del loop usando `GameState` como fuente primaria.
 
 ### Progreso de implementacion (items 1-10)
 
 - [x] 1. Frame pacing sin busy wait
 - [~] 2. Pathfinding A* (implementacion base activa, faltan optimizaciones/caching y resolucion de bloqueos dinamicos)
 - [x] 3. Separar simulacion y render (incluye timestep fijo con acumulador)
-- [~] 4. Migrar globales a `GameState` (fase inicial, convive con globales legacy)
+- [~] 4. Migrar globales a `GameState` (running/camara/fps/build/seleccion ya migrados; faltan subsistemas restantes)
 - [~] 5. Sistema de comandos desacoplado (cola con prioridades y deduplicacion; faltan colas por unidad y cancelaciones explicitas)
 - [~] 6. Reestructura de IA (introducidos modos estrategicos y helpers, falta BT/utility completo)
 - [~] 7. Niebla de guerra visual (tiles + entidades + oscurecido parcial; faltan suavizado avanzado y optimizacion)
