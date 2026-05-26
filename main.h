@@ -146,6 +146,8 @@ void gs_apply_to_globals()
     fps = game_state.fps;
     tiempo = game_state.frame_ms;
     modo_construccion_tipo = game_state.build_mode;
+    seleccion.n = game_state.selected_id;
+    seleccion.tipo = game_state.selected_type;
 }
 
 void gs_sync_from_globals()
@@ -155,6 +157,8 @@ void gs_sync_from_globals()
     game_state.fps = fps;
     game_state.frame_ms = tiempo;
     game_state.build_mode = modo_construccion_tipo;
+    game_state.selected_id = seleccion.n;
+    game_state.selected_type = seleccion.tipo;
 }
 
 int construir_objeto(int x, int y, int tipo, int id_jugador);
@@ -290,7 +294,7 @@ void actualizar ()
         if (ud[j].activa()) u[ud[j].id_jugador]++;
     }
     textprintf(pantalla, fuente,0,0,clr_blanco,"CAM:%d FPS:%d  Recursos:%d  Sel:%d  Build:%s [B centro/N almacen] [1=mem 2=debug]",
-        game_state.camera_mode, game_state.fps, jugador[JUGADOR_LOCAL].numero_recursos(), seleccion.n,
+        game_state.camera_mode, game_state.fps, jugador[JUGADOR_LOCAL].numero_recursos(), game_state.selected_id,
         (game_state.build_mode==OBJ_TIPO_CENTRO)?"centro":"almacen");
     textprintf(pantalla, fuente,0,14,clr_blanco,"Uds  P0:%d P1:%d P2:%d P3:%d",u[0], u[1], u[2], u[3]);
     if (ver_memoria==1)
@@ -563,6 +567,9 @@ while (SDL_PollEvent (&event))
                             break;
                     }
                 }         
+				game_state.selected_id = seleccion.n;
+				game_state.selected_type = seleccion.tipo;
+                gs_apply_to_globals();
             } else {
                    if ( event.button.button == SDL_BUTTON_RIGHT)
                    {
@@ -774,6 +781,20 @@ void dibujarmapa () {
 
 			//Dibuja el tile en la pantalla
 			d_spr_mapa(px, py, mapa[x][y]);
+
+            if (!vis_actual[x][y])
+            {
+                SDL_Rect fog_rect;
+                fog_rect.x = px + 8;
+                fog_rect.y = py + 8;
+                fog_rect.w = 48;
+                fog_rect.h = 48;
+                if (fog_rect.x < RESX && fog_rect.y < RESY && fog_rect.x + fog_rect.w > 0 && fog_rect.y + fog_rect.h > 0)
+                {
+                    Uint32 fog_color = SDL_MapRGB(pantalla->format, 16, 16, 16);
+                    SDL_FillRect(pantalla, &fog_rect, fog_color);
+                }
+            }
 		}
 	}
 

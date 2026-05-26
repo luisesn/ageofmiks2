@@ -175,6 +175,8 @@ y establece `cwd` a `${workspaceFolder}` para que los assets se encuentren.
 - IA con decision de expansion economica: construccion automatica limitada de `almacen` cuando hay recursos suficientes.
 - Cola de comandos con prioridad y deduplicacion (movimiento por unidad y ordenes macro) para reducir spam de input.
 - IA parametrizable desde `balance.cfg` para expansion/economia (`ia_objetivo_almacenes`, `ia_recursos_min_ataque`).
+- Niebla parcial mejorada: tiles explorados pero no visibles se oscurecen en lugar de ocultarse por completo.
+- Migracion adicional a `GameState`: seleccion activa integrada en el estado de juego.
 
 ### Progreso de implementacion (items 1-10)
 
@@ -184,7 +186,7 @@ y establece `cwd` a `${workspaceFolder}` para que los assets se encuentren.
 - [~] 4. Migrar globales a `GameState` (fase inicial, convive con globales legacy)
 - [~] 5. Sistema de comandos desacoplado (cola con prioridades y deduplicacion; faltan colas por unidad y cancelaciones explicitas)
 - [~] 6. Reestructura de IA (introducidos modos estrategicos y helpers, falta BT/utility completo)
-- [~] 7. Niebla de guerra visual (tiles + entidades, faltan suavizado, niebla parcial y rendimiento)
+- [~] 7. Niebla de guerra visual (tiles + entidades + oscurecido parcial; faltan suavizado avanzado y optimizacion)
 - [~] 8. Sistema de obstaculos/ocupacion (integrado en movimiento con ocupacion dinamica y fallback local; faltan politicas avanzadas anti-atasco)
 - [~] 9. Balance data-driven (incluye unidades, edificios y parametros IA base; falta cubrir mas sistemas)
 - [~] 10. Construccion de edificios jugable (centro + almacen con coste/validacion y efecto economico, faltan GUI/colas/tipos)

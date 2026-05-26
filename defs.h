@@ -104,9 +104,11 @@ typedef struct GameState
     Uint32 fps;
     Uint32 frame_ms;
     int build_mode;
+    int selected_id;
+    int selected_type;
 } GameState;
 
-GameState game_state = {1, 1, 0, 0, 0};
+GameState game_state = {1, 1, 0, 0, 0, -1, 0};
 
 #define CMD_TIPO_NONE 0
 #define CMD_TIPO_MOVER_UNIDAD 1
