@@ -170,6 +170,8 @@ y establece `cwd` a `${workspaceFolder}` para que los assets se encuentren.
 - Sistema de comandos desacoplado por cola (`command_queue`) para entradas de movimiento/construccion/ordenes globales.
 - IA reorganizada con modos estrategicos basicos (economia/defensa/ataque) y helpers de decision.
 - Niebla de guerra visual basica: solo se renderizan tiles explorados del jugador local.
+- Niebla de guerra extendida a entidades: unidades enemigas solo visibles en vision actual y objetos por tiles explorados.
+- IA con decision de expansion economica: construccion automatica limitada de `almacen` cuando hay recursos suficientes.
 
 ### Progreso de implementacion (items 1-10)
 
@@ -179,7 +181,7 @@ y establece `cwd` a `${workspaceFolder}` para que los assets se encuentren.
 - [~] 4. Migrar globales a `GameState` (fase inicial, convive con globales legacy)
 - [~] 5. Sistema de comandos desacoplado (cola base integrada, faltan colas por unidad/prioridades)
 - [~] 6. Reestructura de IA (introducidos modos estrategicos y helpers, falta BT/utility completo)
-- [~] 7. Niebla de guerra visual (version basica de explorado/visible, falta suavizado y niebla parcial)
+- [~] 7. Niebla de guerra visual (tiles + entidades, faltan suavizado, niebla parcial y rendimiento)
 - [~] 8. Sistema de obstaculos/ocupacion (integrado en movimiento con ocupacion dinamica y fallback local; faltan politicas avanzadas anti-atasco)
 - [~] 9. Balance data-driven (capa inicial con `balance.cfg`, falta cubrir mas tipos/unidades/edificios)
 - [~] 10. Construccion de edificios jugable (centro + almacen con coste/validacion y efecto economico, faltan GUI/colas/tipos)

@@ -146,6 +146,8 @@ void procesar_orden()
 }
 void dibujar()
 {
+    if (id_jugador!=JUGADOR_LOCAL && !vis_explorado[x][y]) return;
+
     //Posici�n en la pantalla
     area2.x=(x - y)*(32) - scrollx; //-32;
     area2.y=(x + y)*(16) - scrolly; //-16;
@@ -466,6 +468,8 @@ void ira(int curx, int cury)
 void atacar_();
 void dibujar()
 {
+    if (id_jugador!=JUGADOR_LOCAL && !vis_actual[x][y]) return;
+
     //Posici�n en la pantalla
     area2.x=int ((x - y)*(32) - scrollx+(cx-cy)*32/10); //-32;
     area2.y=int ((x + y)*(16) - scrolly-16+(cx+cy)*16/10); //-16;

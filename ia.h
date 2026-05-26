@@ -6,6 +6,7 @@ ia.h: clase de la ia del juego
 
 int crear_aldeano(int id_p);
 int crear_soldado(int id_p);
+int construir_objeto(int x, int y, int tipo, int id_jugador);
 
 
 typedef class def_ia
@@ -228,6 +229,40 @@ int buscar_soldado_libre ()
     return -1;
 }
 
+int numero_almacenes()
+{
+    int total=0;
+    for (int j=0; j<uds; j++)
+    {
+        if (obj[j].construido && obj[j].id_jugador==id_jugador && obj[j].tipo==OBJ_TIPO_ALMACEN)
+        {
+            total++;
+        }
+    }
+    return total;
+}
+
+void intentar_expandir_economia(int recursos)
+{
+    if (recursos < (cfg_precio_almacen + cfg_precio_aldeano)) return;
+
+    int almacenes = numero_almacenes();
+    if (almacenes >= 3) return;
+
+    int cx = obj[jugador[id_jugador].objeto_centro].x;
+    int cy = obj[jugador[id_jugador].objeto_centro].y;
+
+    for (int intento=0; intento<10; intento++)
+    {
+        int nx = cx + (rand()%9) - 4;
+        int ny = cy + (rand()%9) - 4;
+        if (construir_objeto(nx, ny, OBJ_TIPO_ALMACEN, id_jugador) != -1)
+        {
+            break;
+        }
+    }
+}
+
 
 void main()
 {
@@ -241,6 +276,7 @@ void main()
     //Recursos
     recursos=jugador[id_jugador].numero_recursos();
     recalcular_estrategia(recursos, soldados);
+    intentar_expandir_economia(recursos);
 
     //
     if (aldeanos>0 || recursos>cfg_precio_aldeano)
