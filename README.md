@@ -166,16 +166,20 @@ y establece `cwd` a `${workspaceFolder}` para que los assets se encuentren.
 - Fallback de desbloqueo local cuando A* queda temporalmente bloqueado por ocupacion dinamica.
 - Nuevo edificio jugable `almacen` con ingreso periodico de recursos y coste configurable (`precio_almacen`, `ingreso_almacen`).
 - Loop principal con timestep fijo por acumulador y limite de catch-up para evitar picos/espiral de actualizaciones.
+- Migracion inicial de estado a `GameState` (sin eliminar aun todos los globales).
+- Sistema de comandos desacoplado por cola (`command_queue`) para entradas de movimiento/construccion/ordenes globales.
+- IA reorganizada con modos estrategicos basicos (economia/defensa/ataque) y helpers de decision.
+- Niebla de guerra visual basica: solo se renderizan tiles explorados del jugador local.
 
 ### Progreso de implementacion (items 1-10)
 
 - [x] 1. Frame pacing sin busy wait
 - [~] 2. Pathfinding A* (implementacion base activa, faltan optimizaciones/caching y resolucion de bloqueos dinamicos)
 - [x] 3. Separar simulacion y render (incluye timestep fijo con acumulador)
-- [ ] 4. Migrar globales a `GameState`
-- [ ] 5. Sistema de comandos desacoplado
-- [ ] 6. Reestructura de IA (behavior tree/utility)
-- [ ] 7. Niebla de guerra visual
+- [~] 4. Migrar globales a `GameState` (fase inicial, convive con globales legacy)
+- [~] 5. Sistema de comandos desacoplado (cola base integrada, faltan colas por unidad/prioridades)
+- [~] 6. Reestructura de IA (introducidos modos estrategicos y helpers, falta BT/utility completo)
+- [~] 7. Niebla de guerra visual (version basica de explorado/visible, falta suavizado y niebla parcial)
 - [~] 8. Sistema de obstaculos/ocupacion (integrado en movimiento con ocupacion dinamica y fallback local; faltan politicas avanzadas anti-atasco)
 - [~] 9. Balance data-driven (capa inicial con `balance.cfg`, falta cubrir mas tipos/unidades/edificios)
 - [~] 10. Construccion de edificios jugable (centro + almacen con coste/validacion y efecto economico, faltan GUI/colas/tipos)

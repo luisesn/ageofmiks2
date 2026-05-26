@@ -24,6 +24,8 @@ FILE *f_mapa;
 int mapa[ANCHOX][ANCHOY];
 int obstaculos[ANCHOX][ANCHOY];
 int ocupacion_uds[ANCHOX][ANCHOY];
+unsigned char vis_actual[ANCHOX][ANCHOY];
+unsigned char vis_explorado[ANCHOX][ANCHOY];
 
 
 //Variables de gr�ficos
@@ -92,6 +94,38 @@ int cfg_ingreso_almacen=2;
 
 // Tipo de edificio a construir al hacer click derecho sin seleccion
 int modo_construccion_tipo=0;
+
+typedef struct GameState
+{
+    int running;
+    int camera_mode;
+    Uint32 fps;
+    Uint32 frame_ms;
+    int build_mode;
+} GameState;
+
+GameState game_state = {1, 1, 0, 0, 0};
+
+#define CMD_TIPO_NONE 0
+#define CMD_TIPO_MOVER_UNIDAD 1
+#define CMD_TIPO_CONSTRUIR 2
+#define CMD_TIPO_EXPLORAR_TODOS 3
+#define CMD_TIPO_EXPLORAR_SOLDADOS 4
+#define CMD_TIPO_RECOGER_ALDEANOS 5
+
+typedef struct def_command
+{
+    int tipo;
+    int unidad;
+    int jugador;
+    int x;
+    int y;
+    int extra;
+} def_command;
+
+#define MAX_COMMAND_QUEUE 1024
+def_command command_queue[MAX_COMMAND_QUEUE];
+int command_queue_size=0;
     
 //Variables del usuario
 char usuario[254]="\0";

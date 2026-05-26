@@ -68,8 +68,10 @@ static void actualizar_simulacion(double &ang)
 
     actualizar_camara();
     actualizar_ocupacion_uds();
+    command_process_queue();
     actualizar_uds();
     actualizar_economia_objetos();
+    actualizar_niebla_local();
     for (int j=0; j<jugadores-1; j++) ia[j].main();
 }
 

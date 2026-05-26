@@ -138,6 +138,98 @@ void crear_unidades()
 
 int ver_memoria=0;
 
+void gs_sync_from_globals()
+{
+    game_state.running = (fin==0);
+    game_state.camera_mode = camara;
+    game_state.fps = fps;
+    game_state.frame_ms = tiempo;
+    game_state.build_mode = modo_construccion_tipo;
+}
+
+int construir_objeto(int x, int y, int tipo, int id_jugador);
+
+int command_enqueue(int tipo, int unidad, int jugador, int x, int y, int extra)
+{
+    if (command_queue_size >= MAX_COMMAND_QUEUE) return 0;
+    command_queue[command_queue_size].tipo = tipo;
+    command_queue[command_queue_size].unidad = unidad;
+    command_queue[command_queue_size].jugador = jugador;
+    command_queue[command_queue_size].x = x;
+    command_queue[command_queue_size].y = y;
+    command_queue[command_queue_size].extra = extra;
+    command_queue_size++;
+    return 1;
+}
+
+void command_process_queue()
+{
+    for (int i=0; i<command_queue_size; i++)
+    {
+        def_command &cmd = command_queue[i];
+        switch (cmd.tipo)
+        {
+            case CMD_TIPO_MOVER_UNIDAD:
+                if (cmd.unidad>=0 && cmd.unidad<uds && ud[cmd.unidad].activa())
+                {
+                    ud[cmd.unidad].ira(cmd.x, cmd.y);
+                }
+                break;
+            case CMD_TIPO_CONSTRUIR:
+                construir_objeto(cmd.x, cmd.y, cmd.extra, cmd.jugador);
+                break;
+            case CMD_TIPO_EXPLORAR_TODOS:
+                for (int t=0; t<uds; t++) if (ud[t].activa()) ud[t].ira(rand()%ANCHOX, rand()%ANCHOY);
+                break;
+            case CMD_TIPO_EXPLORAR_SOLDADOS:
+                for (int t=0; t<uds; t++) if (ud[t].tipo==UD_TIPO_SOLDADO && ud[t].activa()) ud[t].explorar();
+                break;
+            case CMD_TIPO_RECOGER_ALDEANOS:
+                for (int t=0; t<uds; t++)
+                {
+                    if (ud[t].id_jugador==cmd.jugador && ud[t].tipo==UD_TIPO_ALDEANO && ud[t].activa())
+                    {
+                        ud[t].explorar_recursos();
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    command_queue_size=0;
+}
+
+void actualizar_niebla_local()
+{
+    for (int y=0; y<ANCHOY; y++)
+    {
+        for (int x=0; x<ANCHOX; x++)
+        {
+            vis_actual[x][y]=0;
+        }
+    }
+
+    for (int j=0; j<uds; j++)
+    {
+        if (!ud[j].activa() || ud[j].id_jugador!=JUGADOR_LOCAL) continue;
+        int r = (ud[j].alcance_vision > 1) ? ud[j].alcance_vision : 3;
+
+        for (int dy=-r; dy<=r; dy++)
+        {
+            for (int dx=-r; dx<=r; dx++)
+            {
+                int xx = ud[j].x + dx;
+                int yy = ud[j].y + dy;
+                if (xx<0 || xx>=ANCHOX || yy<0 || yy>=ANCHOY) continue;
+                if (abs(dx)+abs(dy) > r) continue;
+                vis_actual[xx][yy]=1;
+                vis_explorado[xx][yy]=1;
+            }
+        }
+    }
+}
+
 void actualizar ()
 {
     int u[]={0,0,0,0,0,0,0,0};
@@ -181,6 +273,8 @@ void actualizar ()
      rect = (SDL_Rect) {0,0,RESX,RESY};
      SDL_FillRect(pantalla, &rect, SDL_MapRGB(pantalla->format, 255, 0, 0));*/
     SDL_FillRect (pantalla, NULL, 0);
+
+    gs_sync_from_globals();
 
 }
 
@@ -296,6 +390,15 @@ void crear_objetos()
         jugador[j].objeto_centro=j;
     }
 
+    for (int y=0; y<ANCHOY; y++)
+    {
+        for (int x=0; x<ANCHOX; x++)
+        {
+            vis_actual[x][y]=0;
+            vis_explorado[x][y]=0;
+        }
+    }
+
     for (int temp=0; temp<40; temp++)
       {
             construir_objeto(rand()%ANCHOX, rand()%ANCHOY, 1,-1);
@@ -387,7 +490,8 @@ while (SDL_PollEvent (&event))
                             {
                                 if (ud[t].id_jugador==JUGADOR_LOCAL && ud[t].tipo==UD_TIPO_ALDEANO && ud[t].activa())
                                 {
-                                    ud[t].explorar_recursos();
+                                    command_enqueue(CMD_TIPO_RECOGER_ALDEANOS, -1, JUGADOR_LOCAL, 0, 0, 0);
+                                    break;
                                 }
                             }
                             break;
@@ -407,11 +511,11 @@ while (SDL_PollEvent (&event))
                                 case 0:
                                     //ud[seleccion].x=curx;
                                     //ud[seleccion].y=cury;
-                                    ud[seleccion.n].ira(curx, cury);
+                                    command_enqueue(CMD_TIPO_MOVER_UNIDAD, seleccion.n, JUGADOR_LOCAL, curx, cury, 0);
                                     break;
                             }
                         } else {
-                            construir_objeto(curx, cury, modo_construccion_tipo, JUGADOR_LOCAL);
+                            command_enqueue(CMD_TIPO_CONSTRUIR, -1, JUGADOR_LOCAL, curx, cury, modo_construccion_tipo);
                         }
                    }
             }
@@ -466,30 +570,15 @@ if (teclas[SDL_SCANCODE_ESCAPE]) fin=1;
    }
    if (teclas[SDL_SCANCODE_E])
    {
-        for (int temp=0; temp<uds; temp++)
-        {
-            ud[temp].ira(rand()%ANCHOX, rand()%ANCHOY);
-        }
+       command_enqueue(CMD_TIPO_EXPLORAR_TODOS, -1, JUGADOR_LOCAL, 0, 0, 0);
    }
    if (teclas[SDL_SCANCODE_R])
    {
-        for (int t=0; t<uds; t++)
-        {
-            if (ud[t].tipo==1 && ud[t].activa())
-            {
-                ud[t].explorar_recursos();
-            }
-        }
+        command_enqueue(CMD_TIPO_RECOGER_ALDEANOS, -1, JUGADOR_LOCAL, 0, 0, 0);
    }
    if (teclas[SDL_SCANCODE_T])
    {
-        for (int t=0; t<uds; t++)
-        {
-            if (ud[t].tipo==2 && ud[t].activa())
-            {
-                ud[t].explorar();
-            }
-        }
+        command_enqueue(CMD_TIPO_EXPLORAR_SOLDADOS, -1, JUGADOR_LOCAL, 0, 0, 0);
    }
    if (teclas[SDL_SCANCODE_1])
    {
@@ -613,6 +702,7 @@ void dibujarmapa () {
 	//Por cada casilla del mapa
 		for (x = 0; x < ANCHOX; x++) {
 	for (y = 0; y < ANCHOY; y++) {
+            if (!vis_explorado[x][y]) continue;
 			//Calculamos las coordenadas de pantalla a partir de las de la casilla
 			//y el desplazamiento de la camara (scrollX, scrollY)
 			px = (x - y)*(32) - scrollx;

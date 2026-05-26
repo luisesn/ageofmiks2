@@ -32,6 +32,40 @@ public:
     int recursos_minimos_ataque;
 
     int probabilidad_atacar;
+    int estrategia_modo;
+
+#define IA_MODO_ECONOMIA 0
+#define IA_MODO_DEFENSA  1
+#define IA_MODO_ATAQUE   2
+
+int contar_enemigos_memoria()
+{
+    int enemigos=0;
+    for (int j=0; j<MAX_MEM; j++)
+    {
+        if (jugador[id_jugador].mem.m[j].activa!=0 && jugador[id_jugador].mem.m[j].tipo==MEMORIA_UNIDAD_ENEMIGA)
+        {
+            enemigos++;
+        }
+    }
+    return enemigos;
+}
+
+void recalcular_estrategia(int recursos, int soldados)
+{
+    int enemigos = contar_enemigos_memoria();
+    if (enemigos>0 && soldados>=unidades_minimas_ataque && recursos>recursos_minimos_ataque)
+    {
+        estrategia_modo = IA_MODO_ATAQUE;
+        return;
+    }
+    if (soldados<unidades_minimas_defensa || recursos<recursos_minimos_ataque)
+    {
+        estrategia_modo = IA_MODO_DEFENSA;
+        return;
+    }
+    estrategia_modo = IA_MODO_ECONOMIA;
+}
 
 
 
@@ -52,6 +86,7 @@ void configurar(int id)
     
     unidades_patrullando_edificio=3;
     probabilidad_atacar=rand()%100;
+    estrategia_modo=IA_MODO_ECONOMIA;
 }
 
 
@@ -205,6 +240,7 @@ void main()
     
     //Recursos
     recursos=jugador[id_jugador].numero_recursos();
+    recalcular_estrategia(recursos, soldados);
 
     //
     if (aldeanos>0 || recursos>cfg_precio_aldeano)
@@ -233,7 +269,7 @@ void main()
         }
 
         //Estrategia de defensa
-        if (recursos>recursos_minimos_defensas)
+        if (recursos>recursos_minimos_defensas && estrategia_modo!=IA_MODO_ATAQUE)
         {
             if ((buscar_soldados_patrullando()+buscar_soldados_atacando())<=unidades_maximas_defensa)
             {
@@ -276,10 +312,10 @@ void main()
         }
 
         //Estrategia de ataque
-        if (recursos>recursos_minimos_ataque)
+        if (recursos>recursos_minimos_ataque && estrategia_modo!=IA_MODO_DEFENSA)
         {
             //Construcci�n de uds. de ataque
-            if (soldados<unidades_minimas_ataque && recursos>UD_PRECIO_SOLDADO)
+            if (soldados<unidades_minimas_ataque && recursos>cfg_precio_soldado)
             {
                     t=crear_soldado(id_jugador);
                     if (t!=-1) 
@@ -290,14 +326,7 @@ void main()
 
             int tpatrullando,enemigos=0,tasig=0;
             tpatrullando=buscar_soldados_explorando();
-            //Atacamos uds. dentro del alcance
-            for (int j=0; j<MAX_MEM; j++)
-            {
-                if (jugador[id_jugador].mem.m[j].activa!=0 && jugador[id_jugador].mem.m[j].tipo==MEMORIA_UNIDAD_ENEMIGA)
-                {
-                    enemigos++;
-                }
-            }
+            enemigos = contar_enemigos_memoria();
             if (enemigos>0)
             {
                 tpatrullando=tpatrullando/enemigos;
@@ -331,7 +360,7 @@ void main()
         //Estrategia de recursos sobrantes
         if (recursos>(recursos_minimos_defensas+recursos_minimos_ataque))
         {
-            if (aldeanos<unidades_maximas_recogiendo && recursos>UD_PRECIO_ALDEANO)
+            if (aldeanos<unidades_maximas_recogiendo && recursos>cfg_precio_aldeano)
             {
                 //Hay que mejorar la busqueda, no todos los aldeanos tienen que estar recogiendo.
                 //Crear un aldeano.
