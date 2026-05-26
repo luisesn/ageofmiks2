@@ -8,6 +8,7 @@ clases.h: clases de los objetos y unidades del juego
 #define UD_TIPO_SOLDADO 2
 
 #define OBJ_TIPO_CENTRO 0 
+#define OBJ_TIPO_ALMACEN 2
 
 #define UD_PRECIO_ALDEANO 50
 #define UD_PRECIO_SOLDADO 100
@@ -632,6 +633,32 @@ int siguiente_paso_astar(int sx, int sy, int gx, int gy, int &nx, int &ny)
     return 1;
 }
 
+int siguiente_paso_local(int gx, int gy, int &nx, int &ny)
+{
+    const int vx[4] = {1, -1, 0, 0};
+    const int vy[4] = {0, 0, 1, -1};
+    int best_h = 999999;
+    int found = 0;
+
+    for (int i=0; i<4; i++)
+    {
+        int xx = x + vx[i];
+        int yy = y + vy[i];
+        if (!casilla_transitable(xx, yy)) continue;
+
+        int hh = abs(xx-gx) + abs(yy-gy);
+        if (hh < best_h)
+        {
+            best_h = hh;
+            nx = xx;
+            ny = yy;
+            found = 1;
+        }
+    }
+
+    return found;
+}
+
 void mover()
 {
     int dx, dy;
@@ -647,6 +674,17 @@ void mover()
         {
             dx = nextx;
             dy = nexty;
+        }
+        else if (siguiente_paso_local(dx, dy, nextx, nexty))
+        {
+            dx = nextx;
+            dy = nexty;
+        }
+        else
+        {
+            // Atasco temporal: no se mueve este frame y reintenta en el siguiente.
+            sprite=0;
+            return;
         }
     }
 

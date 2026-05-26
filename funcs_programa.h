@@ -29,6 +29,8 @@ void cargar_balance()
         else if (strcmp(clave, "defensa_aldeano") == 0) cfg_defensa_aldeano = valor;
         else if (strcmp(clave, "defensa_soldado") == 0) cfg_defensa_soldado = valor;
         else if (strcmp(clave, "precio_centro") == 0) cfg_precio_centro = valor;
+        else if (strcmp(clave, "precio_almacen") == 0) cfg_precio_almacen = valor;
+        else if (strcmp(clave, "ingreso_almacen") == 0) cfg_ingreso_almacen = valor;
     }
 
     fclose(f);

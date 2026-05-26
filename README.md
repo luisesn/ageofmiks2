@@ -24,6 +24,8 @@ Proyecto retomado y migrado a un toolchain moderno (SDL2 + CMake + MSYS2).
 | `R` | Poner aldeanos a recoger recursos |
 | `E` | Poner todas las unidades a explorar |
 | `T` | Poner soldados a explorar |
+| `B` | Seleccionar modo de construccion: centro |
+| `N` | Seleccionar modo de construccion: almacen |
 | `1` | Mostrar/ocultar memoria de la IA |
 | `2` | Mostrar/ocultar debug de unidades |
 | `Q` / `Escape` | Salir |
@@ -161,6 +163,8 @@ y establece `cwd` a `${workspaceFolder}` para que los assets se encuentren.
 - Integracion de pathfinding A* basico (4 direcciones) para calcular el siguiente paso de movimiento.
 - Integrada ocupacion dinamica de unidades por frame para evitar pisado de casillas en movimiento.
 - Construccion basica de centros jugable con click derecho (sin seleccion), validacion de casilla y coste configurable (`precio_centro`).
+- Fallback de desbloqueo local cuando A* queda temporalmente bloqueado por ocupacion dinamica.
+- Nuevo edificio jugable `almacen` con ingreso periodico de recursos y coste configurable (`precio_almacen`, `ingreso_almacen`).
 
 ### Progreso de implementacion (items 1-10)
 
@@ -171,9 +175,9 @@ y establece `cwd` a `${workspaceFolder}` para que los assets se encuentren.
 - [ ] 5. Sistema de comandos desacoplado
 - [ ] 6. Reestructura de IA (behavior tree/utility)
 - [ ] 7. Niebla de guerra visual
-- [~] 8. Sistema de obstaculos/ocupacion (integrado en movimiento contra obstaculos/objetos, falta ocupacion por unidades y resolucion de atascos)
+- [~] 8. Sistema de obstaculos/ocupacion (integrado en movimiento con ocupacion dinamica y fallback local; faltan politicas avanzadas anti-atasco)
 - [~] 9. Balance data-driven (capa inicial con `balance.cfg`, falta cubrir mas tipos/unidades/edificios)
-- [~] 10. Construccion de edificios jugable (fase inicial: centro con coste/validacion, faltan GUI/colas/tipos)
+- [~] 10. Construccion de edificios jugable (centro + almacen con coste/validacion y efecto economico, faltan GUI/colas/tipos)
 
 ---
 

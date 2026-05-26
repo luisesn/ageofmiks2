@@ -67,6 +67,7 @@ static void actualizar_simulacion(double &ang)
     actualizar_camara();
     actualizar_ocupacion_uds();
     actualizar_uds();
+    actualizar_economia_objetos();
     for (int j=0; j<jugadores-1; j++) ia[j].main();
 }
 

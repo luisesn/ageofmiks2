@@ -146,8 +146,9 @@ void actualizar ()
     {
         if (ud[j].activa()) u[ud[j].id_jugador]++;
     }
-    textprintf(pantalla, fuente,0,0,clr_blanco,"CAM:%d FPS:%d  Recursos:%d  Sel:%d  [1=mem 2=debug]",
-        camara, fps, jugador[JUGADOR_LOCAL].numero_recursos(), seleccion.n);
+    textprintf(pantalla, fuente,0,0,clr_blanco,"CAM:%d FPS:%d  Recursos:%d  Sel:%d  Build:%s [B centro/N almacen] [1=mem 2=debug]",
+        camara, fps, jugador[JUGADOR_LOCAL].numero_recursos(), seleccion.n,
+        (modo_construccion_tipo==OBJ_TIPO_CENTRO)?"centro":"almacen");
     textprintf(pantalla, fuente,0,14,clr_blanco,"Uds  P0:%d P1:%d P2:%d P3:%d",u[0], u[1], u[2], u[3]);
     if (ver_memoria==1)
     for (int i=1; i<jugadores; i++)
@@ -234,9 +235,16 @@ int construir_objeto(int x, int y, int tipo, int id_jugador)
 {
     if (!casilla_construible(x, y)) return -1;
 
-    if (tipo==OBJ_TIPO_CENTRO && id_jugador>=0)
+    if (id_jugador>=0)
     {
-        if (jugador[id_jugador].quitar_recursos(cfg_precio_centro)!=1) return -1;
+        if (tipo==OBJ_TIPO_CENTRO)
+        {
+            if (jugador[id_jugador].quitar_recursos(cfg_precio_centro)!=1) return -1;
+        }
+        if (tipo==OBJ_TIPO_ALMACEN)
+        {
+            if (jugador[id_jugador].quitar_recursos(cfg_precio_almacen)!=1) return -1;
+        }
     }
 
     int objn=-1;
@@ -250,8 +258,30 @@ int construir_objeto(int x, int y, int tipo, int id_jugador)
     obj[objn].tipo=tipo;
     obj[objn].x=x;
     obj[objn].y=y;
-    obj[objn].propiedad_1=10000;
+    if (tipo==OBJ_TIPO_CENTRO) obj[objn].propiedad_1=10000;
+    else obj[objn].propiedad_1=0;
     return objn;
+}
+
+void actualizar_economia_objetos()
+{
+    static Uint32 ultimo_tick = 0;
+    Uint32 ahora = SDL_GetTicks();
+    if (ahora - ultimo_tick < 1000) return;
+    ultimo_tick = ahora;
+
+    for (int j=0; j<uds; j++)
+    {
+        if (!obj[j].construido) continue;
+        if (obj[j].tipo!=OBJ_TIPO_ALMACEN) continue;
+        if (obj[j].id_jugador<0 || obj[j].id_jugador>=jugadores) continue;
+
+        int c = jugador[obj[j].id_jugador].objeto_centro;
+        if (c>=0 && c<uds && obj[c].construido)
+        {
+            obj[c].propiedad_1 += cfg_ingreso_almacen;
+        }
+    }
 }
 
 void crear_objetos()
@@ -284,6 +314,8 @@ while (SDL_PollEvent (&event))
     switch (event.type)
     {
         case SDL_KEYDOWN:
+            if (event.key.keysym.scancode==SDL_SCANCODE_B) modo_construccion_tipo=OBJ_TIPO_CENTRO;
+            if (event.key.keysym.scancode==SDL_SCANCODE_N) modo_construccion_tipo=OBJ_TIPO_ALMACEN;
         	break;
         case SDL_KEYUP:
         	break;
@@ -379,7 +411,7 @@ while (SDL_PollEvent (&event))
                                     break;
                             }
                         } else {
-                            construir_objeto(curx, cury, OBJ_TIPO_CENTRO, JUGADOR_LOCAL);
+                            construir_objeto(curx, cury, modo_construccion_tipo, JUGADOR_LOCAL);
                         }
                    }
             }

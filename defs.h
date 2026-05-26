@@ -87,6 +87,11 @@ int cfg_ataque_soldado=50;
 int cfg_defensa_aldeano=2;
 int cfg_defensa_soldado=4;
 int cfg_precio_centro=400;
+int cfg_precio_almacen=250;
+int cfg_ingreso_almacen=2;
+
+// Tipo de edificio a construir al hacer click derecho sin seleccion
+int modo_construccion_tipo=0;
     
 //Variables del usuario
 char usuario[254]="\0";
