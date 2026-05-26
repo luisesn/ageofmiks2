@@ -31,6 +31,8 @@ void cargar_balance()
         else if (strcmp(clave, "precio_centro") == 0) cfg_precio_centro = valor;
         else if (strcmp(clave, "precio_almacen") == 0) cfg_precio_almacen = valor;
         else if (strcmp(clave, "ingreso_almacen") == 0) cfg_ingreso_almacen = valor;
+        else if (strcmp(clave, "ia_objetivo_almacenes") == 0) cfg_ia_objetivo_almacenes = valor;
+        else if (strcmp(clave, "ia_recursos_min_ataque") == 0) cfg_ia_recursos_min_ataque = valor;
     }
 
     fclose(f);

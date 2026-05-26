@@ -91,6 +91,8 @@ int cfg_defensa_soldado=4;
 int cfg_precio_centro=400;
 int cfg_precio_almacen=250;
 int cfg_ingreso_almacen=2;
+int cfg_ia_objetivo_almacenes=3;
+int cfg_ia_recursos_min_ataque=200;
 
 // Tipo de edificio a construir al hacer click derecho sin seleccion
 int modo_construccion_tipo=0;
@@ -121,11 +123,14 @@ typedef struct def_command
     int x;
     int y;
     int extra;
+    int prioridad;
+    int secuencia;
 } def_command;
 
 #define MAX_COMMAND_QUEUE 1024
 def_command command_queue[MAX_COMMAND_QUEUE];
 int command_queue_size=0;
+int command_queue_sequence=0;
     
 //Variables del usuario
 char usuario[254]="\0";

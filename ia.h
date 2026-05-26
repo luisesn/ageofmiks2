@@ -75,7 +75,7 @@ void configurar(int id)
     id_jugador=id;
 
     recursos_minimos_defensas=0;
-    recursos_minimos_ataque=200;
+    recursos_minimos_ataque=cfg_ia_recursos_min_ataque;
     unidades_minimas_recogiendo=4+rand()%4;
     unidades_maximas_recogiendo=20+rand()%20;
     
@@ -247,7 +247,7 @@ void intentar_expandir_economia(int recursos)
     if (recursos < (cfg_precio_almacen + cfg_precio_aldeano)) return;
 
     int almacenes = numero_almacenes();
-    if (almacenes >= 3) return;
+    if (almacenes >= cfg_ia_objetivo_almacenes) return;
 
     int cx = obj[jugador[id_jugador].objeto_centro].x;
     int cy = obj[jugador[id_jugador].objeto_centro].y;

@@ -19,6 +19,7 @@ main.h: funciones generales e includes
 #include <queue>
 #include <limits>
 #include <functional>
+#include <algorithm>
 using namespace std;
 //#include <SDL/SDL_gfxPrimitives.h>
 
@@ -158,8 +159,36 @@ void gs_sync_from_globals()
 
 int construir_objeto(int x, int y, int tipo, int id_jugador);
 
-int command_enqueue(int tipo, int unidad, int jugador, int x, int y, int extra)
+int command_enqueue(int tipo, int unidad, int jugador, int x, int y, int extra, int prioridad=0)
 {
+    // Deduplicacion: actualiza orden de movimiento existente para la misma unidad.
+    if (tipo==CMD_TIPO_MOVER_UNIDAD && unidad>=0)
+    {
+        for (int i=0; i<command_queue_size; i++)
+        {
+            if (command_queue[i].tipo==CMD_TIPO_MOVER_UNIDAD && command_queue[i].unidad==unidad)
+            {
+                command_queue[i].x = x;
+                command_queue[i].y = y;
+                if (prioridad > command_queue[i].prioridad) command_queue[i].prioridad = prioridad;
+                return 1;
+            }
+        }
+    }
+
+    // Deduplicacion de ordenes macro repetidas del mismo jugador.
+    if (tipo==CMD_TIPO_EXPLORAR_TODOS || tipo==CMD_TIPO_EXPLORAR_SOLDADOS || tipo==CMD_TIPO_RECOGER_ALDEANOS)
+    {
+        for (int i=0; i<command_queue_size; i++)
+        {
+            if (command_queue[i].tipo==tipo && command_queue[i].jugador==jugador)
+            {
+                if (prioridad > command_queue[i].prioridad) command_queue[i].prioridad = prioridad;
+                return 1;
+            }
+        }
+    }
+
     if (command_queue_size >= MAX_COMMAND_QUEUE) return 0;
     command_queue[command_queue_size].tipo = tipo;
     command_queue[command_queue_size].unidad = unidad;
@@ -167,12 +196,25 @@ int command_enqueue(int tipo, int unidad, int jugador, int x, int y, int extra)
     command_queue[command_queue_size].x = x;
     command_queue[command_queue_size].y = y;
     command_queue[command_queue_size].extra = extra;
+    command_queue[command_queue_size].prioridad = prioridad;
+    command_queue[command_queue_size].secuencia = command_queue_sequence++;
     command_queue_size++;
     return 1;
 }
 
+bool command_compare(const def_command &a, const def_command &b)
+{
+    if (a.prioridad != b.prioridad) return a.prioridad > b.prioridad;
+    return a.secuencia < b.secuencia;
+}
+
 void command_process_queue()
 {
+    if (command_queue_size>1)
+    {
+        sort(command_queue, command_queue + command_queue_size, command_compare);
+    }
+
     for (int i=0; i<command_queue_size; i++)
     {
         def_command &cmd = command_queue[i];
@@ -502,7 +544,7 @@ while (SDL_PollEvent (&event))
                             {
                                 if (ud[t].id_jugador==JUGADOR_LOCAL && ud[t].tipo==UD_TIPO_ALDEANO && ud[t].activa())
                                 {
-                                    command_enqueue(CMD_TIPO_RECOGER_ALDEANOS, -1, JUGADOR_LOCAL, 0, 0, 0);
+                                    command_enqueue(CMD_TIPO_RECOGER_ALDEANOS, -1, JUGADOR_LOCAL, 0, 0, 0, 5);
                                     break;
                                 }
                             }
@@ -532,11 +574,11 @@ while (SDL_PollEvent (&event))
                                 case 0:
                                     //ud[seleccion].x=curx;
                                     //ud[seleccion].y=cury;
-                                    command_enqueue(CMD_TIPO_MOVER_UNIDAD, seleccion.n, JUGADOR_LOCAL, curx, cury, 0);
+                                    command_enqueue(CMD_TIPO_MOVER_UNIDAD, seleccion.n, JUGADOR_LOCAL, curx, cury, 0, 10);
                                     break;
                             }
                         } else {
-                            command_enqueue(CMD_TIPO_CONSTRUIR, -1, JUGADOR_LOCAL, curx, cury, game_state.build_mode);
+                            command_enqueue(CMD_TIPO_CONSTRUIR, -1, JUGADOR_LOCAL, curx, cury, game_state.build_mode, 20);
                         }
                    }
             }
