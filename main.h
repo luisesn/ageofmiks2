@@ -15,6 +15,10 @@ main.h: funciones generales e includes
 #include <string.h>
 #include <stdarg.h>
 #include <iostream>
+#include <vector>
+#include <queue>
+#include <limits>
+#include <functional>
 using namespace std;
 //#include <SDL/SDL_gfxPrimitives.h>
 

@@ -543,9 +543,91 @@ int casilla_transitable(int nx, int ny)
 
     for (int j=0; j<uds; j++)
     {
-        if (obj[j].construido && obj[j].x == nx && obj[j].y == ny) return 0;
+        if (obj[j].construido && obj[j].x == nx && obj[j].y == ny)
+        {
+            // Permite llegar al tile objetivo de la orden aunque este ocupado por objeto.
+            if (nx == orden.dx() && ny == orden.dy()) break;
+            return 0;
+        }
     }
 
+    return 1;
+}
+
+int siguiente_paso_astar(int sx, int sy, int gx, int gy, int &nx, int &ny)
+{
+    if (sx == gx && sy == gy)
+    {
+        nx = sx;
+        ny = sy;
+        return 1;
+    }
+
+    const int total = ANCHOX * ANCHOY;
+    const int inicio = sy * ANCHOX + sx;
+    const int destino = gy * ANCHOX + gx;
+    const int INF = numeric_limits<int>::max();
+
+    vector<int> g(total, INF);
+    vector<int> parent(total, -1);
+    vector<char> cerrado(total, 0);
+
+    auto h = [gx, gy](int x, int y) -> int
+    {
+        return abs(x - gx) + abs(y - gy);
+    };
+
+    priority_queue<pair<int,int>, vector<pair<int,int> >, greater<pair<int,int> > > abiertos;
+    g[inicio] = 0;
+    abiertos.push(make_pair(h(sx, sy), inicio));
+
+    while (!abiertos.empty())
+    {
+        int actual = abiertos.top().second;
+        abiertos.pop();
+
+        if (cerrado[actual]) continue;
+        cerrado[actual] = 1;
+
+        if (actual == destino) break;
+
+        int ax = actual % ANCHOX;
+        int ay = actual / ANCHOX;
+
+        const int vx[4] = {1, -1, 0, 0};
+        const int vy[4] = {0, 0, 1, -1};
+
+        for (int i=0; i<4; i++)
+        {
+            int xx = ax + vx[i];
+            int yy = ay + vy[i];
+            if (xx < 0 || xx >= ANCHOX || yy < 0 || yy >= ANCHOY) continue;
+
+            if (!(xx == gx && yy == gy) && !casilla_transitable(xx, yy)) continue;
+
+            int idx = yy * ANCHOX + xx;
+            if (cerrado[idx]) continue;
+
+            int tentativo = g[actual] + 1;
+            if (tentativo < g[idx])
+            {
+                g[idx] = tentativo;
+                parent[idx] = actual;
+                abiertos.push(make_pair(tentativo + h(xx, yy), idx));
+            }
+        }
+    }
+
+    if (parent[destino] == -1) return 0;
+
+    int paso = destino;
+    while (parent[paso] != -1 && parent[paso] != inicio)
+    {
+        paso = parent[paso];
+    }
+
+    nx = paso % ANCHOX;
+    ny = paso / ANCHOX;
     return 1;
 }
 
@@ -554,6 +636,19 @@ void mover()
     int dx, dy;
     dy=orden.dy();
     dx=orden.dx();
+
+    // Recalcula proximo tile con A* cuando la unidad esta centrada en casilla.
+    if (cx==5 && cy==5 && (x!=dx || y!=dy))
+    {
+        int nextx = dx;
+        int nexty = dy;
+        if (siguiente_paso_astar(x, y, dx, dy, nextx, nexty))
+        {
+            dx = nextx;
+            dy = nexty;
+        }
+    }
+
     if (dy<y) // El objetivo esta por encima.
     {
         arriba();

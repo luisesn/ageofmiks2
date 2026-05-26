@@ -158,11 +158,12 @@ y establece `cwd` a `${workspaceFolder}` para que los assets se encuentren.
 - Inicializacion explicita de `obstaculos[][]` durante la carga de mapa.
 - Movimiento de unidades con verificacion de casillas transitables frente a obstaculos y objetos construidos.
 - Balance basico configurable en runtime mediante `balance.cfg` (costes y stats principales de aldeanos/soldados).
+- Integracion de pathfinding A* basico (4 direcciones) para calcular el siguiente paso de movimiento.
 
 ### Progreso de implementacion (items 1-10)
 
 - [x] 1. Frame pacing sin busy wait
-- [~] 2. Pathfinding A* (pendiente implementacion)
+- [~] 2. Pathfinding A* (implementacion base activa, faltan optimizaciones/caching y resolucion de bloqueos dinamicos)
 - [~] 3. Separar simulacion y render (fase inicial hecha, falta timestep fijo)
 - [ ] 4. Migrar globales a `GameState`
 - [ ] 5. Sistema de comandos desacoplado
