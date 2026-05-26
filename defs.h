@@ -106,9 +106,13 @@ typedef struct GameState
     int build_mode;
     int selected_id;
     int selected_type;
+    int mouse_x;
+    int mouse_y;
+    int cursor_x;
+    int cursor_y;
 } GameState;
 
-GameState game_state = {1, 1, 0, 0, 0, -1, 0};
+GameState game_state = {1, 1, 0, 0, 0, -1, 0, RESX/2, RESY/2, ANCHOX/2, ANCHOY/2};
 
 #define CMD_TIPO_NONE 0
 #define CMD_TIPO_MOVER_UNIDAD 1
@@ -116,6 +120,7 @@ GameState game_state = {1, 1, 0, 0, 0, -1, 0};
 #define CMD_TIPO_EXPLORAR_TODOS 3
 #define CMD_TIPO_EXPLORAR_SOLDADOS 4
 #define CMD_TIPO_RECOGER_ALDEANOS 5
+#define CMD_TIPO_CANCELAR_UNIDAD 6
 
 typedef struct def_command
 {

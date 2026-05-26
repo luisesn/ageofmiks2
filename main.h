@@ -148,6 +148,10 @@ void gs_apply_to_globals()
     modo_construccion_tipo = game_state.build_mode;
     seleccion.n = game_state.selected_id;
     seleccion.tipo = game_state.selected_type;
+    mousex = game_state.mouse_x;
+    mousey = game_state.mouse_y;
+    curx = game_state.cursor_x;
+    cury = game_state.cursor_y;
 }
 
 void gs_sync_from_globals()
@@ -159,6 +163,10 @@ void gs_sync_from_globals()
     game_state.build_mode = modo_construccion_tipo;
     game_state.selected_id = seleccion.n;
     game_state.selected_type = seleccion.tipo;
+    game_state.mouse_x = mousex;
+    game_state.mouse_y = mousey;
+    game_state.cursor_x = curx;
+    game_state.cursor_y = cury;
 }
 
 int construir_objeto(int x, int y, int tipo, int id_jugador);
@@ -246,6 +254,14 @@ void command_process_queue()
                     {
                         ud[t].explorar_recursos();
                     }
+                }
+                break;
+            case CMD_TIPO_CANCELAR_UNIDAD:
+                if (cmd.unidad>=0 && cmd.unidad<uds && ud[cmd.unidad].activa())
+                {
+                    ud[cmd.unidad].orden.realizada=0;
+                    ud[cmd.unidad].orden.tipo=0;
+                    ud[cmd.unidad].sprite=0;
                 }
                 break;
             default:
@@ -491,8 +507,9 @@ while (SDL_PollEvent (&event))
         default:
         	break;
         case SDL_MOUSEMOTION:
-             mousex = event.motion.x;
-             mousey = event.motion.y;
+               game_state.mouse_x = event.motion.x;
+               game_state.mouse_y = event.motion.y;
+               gs_apply_to_globals();
         	//Calculamos las coordenadas de pantalla a partir de las de la casilla
         	//y el desplazamiento de la camara (scrollX, scrollY)
         	// Ecs. originales de c�lculo de posici�n de sprites del mapa
@@ -502,9 +519,10 @@ while (SDL_PollEvent (&event))
         	//px= 32*x - 32*y - scrollx;
         	//py = 16*x + 16*y - scrolly;
         	//px+2*py = 64*x  - scrolly - scrollx;
-        	curx= (mousex+2*mousey+scrollx+2*scrolly-96)/64;
+    		game_state.cursor_x= (mousex+2*mousey+scrollx+2*scrolly-96)/64;
         	//px-2*py= -64*y -scrollx + scrolly;
-            cury=(2*mousey-mousex-scrollx+2*scrolly-32)/64;
+            game_state.cursor_y=(2*mousey-mousex-scrollx+2*scrolly-32)/64;
+            gs_apply_to_globals();
         	//Dibuja el tile en la pantalla
         	//d_spr_mapa(px, py, mapa[x][y]);
              break;
@@ -615,19 +633,23 @@ if (teclas[SDL_SCANCODE_ESCAPE]) { game_state.running=0; gs_apply_to_globals(); 
 
    if (teclas[SDL_SCANCODE_W])
    {
-      cury--;
+        game_state.cursor_y--;
+        gs_apply_to_globals();
    }
    if (teclas[SDL_SCANCODE_S])
    {
-      cury++;
+        game_state.cursor_y++;
+        gs_apply_to_globals();
    }
    if (teclas[SDL_SCANCODE_A])
    {
-      curx--;
+        game_state.cursor_x--;
+        gs_apply_to_globals();
    }
    if (teclas[SDL_SCANCODE_D])
    {
-      curx++;
+        game_state.cursor_x++;
+        gs_apply_to_globals();
    }
 
    if (teclas[SDL_SCANCODE_Q])
@@ -650,6 +672,13 @@ if (teclas[SDL_SCANCODE_ESCAPE]) { game_state.running=0; gs_apply_to_globals(); 
    if (teclas[SDL_SCANCODE_T])
    {
         command_enqueue(CMD_TIPO_EXPLORAR_SOLDADOS, -1, JUGADOR_LOCAL, 0, 0, 0);
+   }
+   if (teclas[SDL_SCANCODE_X])
+   {
+       if (game_state.selected_id>=0 && game_state.selected_type==0)
+       {
+          command_enqueue(CMD_TIPO_CANCELAR_UNIDAD, game_state.selected_id, JUGADOR_LOCAL, 0, 0, 0, 30);
+       }
    }
    if (teclas[SDL_SCANCODE_1])
    {

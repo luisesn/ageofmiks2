@@ -25,6 +25,7 @@ Proyecto retomado y migrado a un toolchain moderno (SDL2 + CMake + MSYS2).
 | `R` | Poner aldeanos a recoger recursos |
 | `E` | Poner todas las unidades a explorar |
 | `T` | Poner soldados a explorar |
+| `X` | Cancelar orden de la unidad seleccionada |
 | `B` | Seleccionar modo de construccion: centro |
 | `N` | Seleccionar modo de construccion: almacen |
 | `1` | Mostrar/ocultar memoria de la IA |
@@ -178,6 +179,8 @@ y establece `cwd` a `${workspaceFolder}` para que los assets se encuentren.
 - Niebla parcial mejorada: tiles explorados pero no visibles se oscurecen en lugar de ocultarse por completo.
 - Migracion adicional a `GameState`: seleccion activa integrada en el estado de juego.
 - Camara principal del loop usando `GameState` como fuente primaria.
+- Migracion adicional a `GameState`: cursor y mouse sincronizados como parte del estado runtime.
+- Comando explicito de cancelacion por unidad (`CMD_TIPO_CANCELAR_UNIDAD`, tecla `X`).
 
 ### Progreso de implementacion (items 1-10)
 
@@ -185,7 +188,7 @@ y establece `cwd` a `${workspaceFolder}` para que los assets se encuentren.
 - [~] 2. Pathfinding A* (implementacion base activa, faltan optimizaciones/caching y resolucion de bloqueos dinamicos)
 - [x] 3. Separar simulacion y render (incluye timestep fijo con acumulador)
 - [~] 4. Migrar globales a `GameState` (running/camara/fps/build/seleccion ya migrados; faltan subsistemas restantes)
-- [~] 5. Sistema de comandos desacoplado (cola con prioridades y deduplicacion; faltan colas por unidad y cancelaciones explicitas)
+- [~] 5. Sistema de comandos desacoplado (cola con prioridades, deduplicacion y cancelacion explicita; faltan colas por unidad)
 - [~] 6. Reestructura de IA (introducidos modos estrategicos y helpers, falta BT/utility completo)
 - [~] 7. Niebla de guerra visual (tiles + entidades + oscurecido parcial; faltan suavizado avanzado y optimizacion)
 - [~] 8. Sistema de obstaculos/ocupacion (integrado en movimiento con ocupacion dinamica y fallback local; faltan politicas avanzadas anti-atasco)

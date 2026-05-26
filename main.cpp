@@ -97,6 +97,10 @@ int main (int argc, char *argv[])
     game_state.build_mode=OBJ_TIPO_CENTRO;
     game_state.selected_id=-1;
     game_state.selected_type=0;
+    game_state.mouse_x=RESX/2;
+    game_state.mouse_y=RESY/2;
+    game_state.cursor_x=ANCHOX/2;
+    game_state.cursor_y=ANCHOY/2;
     gs_apply_to_globals();
     seleccionn=2;
     atexit (SDL_Quit);
