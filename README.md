@@ -32,23 +32,33 @@ Proyecto retomado y migrado a un toolchain moderno (SDL2 + CMake + MSYS2).
 
 ## Instalación del toolchain (Windows)
 
-El proyecto usa **MSYS2** como entorno de compilación. Proporciona un compilador MinGW-w64
-moderno y un gestor de paquetes (`pacman`) para instalar SDL2 y sus extensiones con un solo comando.
+El proyecto usa **MSYS2**, que es una aplicación de Windows que instala un entorno de
+compilación Unix-like dentro de Windows. Al instalarlo obtienes:
+
+- Un compilador C++ moderno (MinGW-w64 / GCC)
+- `pacman`, un gestor de paquetes que corre **dentro de la terminal de MSYS2** (no en CMD ni PowerShell)
+- Las librerías SDL2 listas para usar
+
+> Todos los comandos de `pacman` y `cmake` del siguiente apartado se ejecutan dentro
+> de la terminal **MSYS2 MINGW64**, no en CMD ni en PowerShell de Windows.
 
 ### 1. Instalar MSYS2
 
-Descarga e instala desde **https://www.msys2.org**
+Descarga el instalador `.exe` desde **https://www.msys2.org** y ejecútalo como cualquier
+programa de Windows. Deja la ruta por defecto (`C:\msys64`).
 
-Durante la instalación deja la ruta por defecto (`C:\msys64`).
-Al terminar, abre la terminal **MSYS2 MINGW64** (no la MSYS2 genérica).
+Al terminar, abre la aplicación **MSYS2 MINGW64** desde el menú Inicio
+(es importante usar **MINGW64**, no la genérica "MSYS2").
 
 ### 2. Actualizar el sistema base
+
+Dentro de la terminal MSYS2 MINGW64:
 
 ```bash
 pacman -Syu
 ```
 
-Si la terminal se cierra sola, vuelve a abrirla y ejecuta:
+Si la terminal se cierra sola al terminar, vuelve a abrirla y ejecuta:
 
 ```bash
 pacman -Su
@@ -56,19 +66,22 @@ pacman -Su
 
 ### 3. Instalar compilador, CMake y librerías SDL2
 
+Dentro de la misma terminal MSYS2 MINGW64:
+
 ```bash
-pacman -S \
-  mingw-w64-x86_64-gcc \
-  mingw-w64-x86_64-cmake \
-  mingw-w64-x86_64-SDL2 \
-  mingw-w64-x86_64-SDL2_ttf \
-  mingw-w64-x86_64-SDL2_mixer
+pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake mingw-w64-x86_64-SDL2 mingw-w64-x86_64-SDL2_ttf mingw-w64-x86_64-SDL2_mixer
 ```
 
-### 4. Añadir MSYS2 al PATH de Windows (opcional pero recomendado)
+Confirma con `Y` cuando lo pida. Esto instala el compilador y las tres librerías SDL2 necesarias.
 
-Añade `C:\msys64\mingw64\bin` a la variable de entorno `PATH` de Windows.
-Esto permite usar `cmake` y `g++` desde el terminal de VSCode sin abrir MSYS2.
+### 4. Añadir MSYS2 al PATH de Windows (recomendado para VSCode)
+
+Para poder usar `cmake` y `g++` desde el terminal integrado de VSCode (sin necesidad
+de abrir MSYS2 cada vez):
+
+1. Abre **Configuración avanzada del sistema** → **Variables de entorno**
+2. En "Variables del sistema", edita `Path` y añade: `C:\msys64\mingw64\bin`
+3. Reinicia VSCode
 
 ---
 
