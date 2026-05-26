@@ -142,6 +142,35 @@ y establece `cwd` a `${workspaceFolder}` para que los assets se encuentren.
 
 ---
 
+## Changelog
+
+### 2026-05-26
+
+- Build de CMake corregido en Windows para resolver el error de entrada `WinMain` con SDL2.
+- Enlace actualizado para incluir `SDL2main` junto con `SDL2`, `SDL2_ttf`, `SDL2_mixer` y `ZLIB`.
+- Añadido post-build en CMake para copiar automáticamente los DLL de SDL2 al directorio del ejecutable.
+- Añadido script `copy_dlls.cmake` para copiar dependencias transitivas de MSYS2 (audio, fuentes, compresion y runtime de MinGW).
+- Corregida la copia de variantes de nombre de DLL (por ejemplo `SDL2.dll`/`libSDL2.dll`, `libopus-0.dll`, `libopusfile-0.dll`, `libiconv-2.dll`, `libvorbis-0.dll`, `libwavpack-1.dll`, `libharfbuzz-0.dll`).
+- Verificado que el ejecutable `build/AgeOfMiks2.exe` se genera junto con los DLL requeridos en `build/`.
+- Loop principal refactorizado para eliminar espera activa (`busy wait`) y usar `SDL_Delay` para limitar FPS.
+- Separacion inicial entre simulacion y renderizado en `main.cpp` (`actualizar_simulacion` y `renderizar_frame`).
+- Credenciales hardcodeadas eliminadas de `defs.h` (usuario/password quedan vacios por defecto).
+
+### Progreso de implementacion (items 1-10)
+
+- [x] 1. Frame pacing sin busy wait
+- [~] 2. Pathfinding A* (pendiente implementacion)
+- [~] 3. Separar simulacion y render (fase inicial hecha, falta timestep fijo)
+- [ ] 4. Migrar globales a `GameState`
+- [ ] 5. Sistema de comandos desacoplado
+- [ ] 6. Reestructura de IA (behavior tree/utility)
+- [ ] 7. Niebla de guerra visual
+- [~] 8. Sistema de obstaculos/ocupacion (estructura existe, falta integrar en movimiento)
+- [ ] 9. Balance data-driven (archivos externos)
+- [ ] 10. Construccion de edificios jugable
+
+---
+
 ## Estructura del proyecto
 
 ```

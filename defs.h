@@ -75,8 +75,8 @@ float se[361],co[361];
 int menu=0;
     
 //Variables del usuario
-char usuario[254]="luisyo2001@gmail.com\0";
-char password[254]="luisyo2001\0";
+char usuario[254]="\0";
+char password[254]="\0";
 
 #define jugadores 4
 #define JUGADOR_LOCAL 0
