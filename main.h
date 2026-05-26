@@ -507,8 +507,17 @@ while (SDL_PollEvent (&event))
                                 }
                             }
                             break;
+                        case 2: // Boton 2: modo construccion centro
+                            game_state.build_mode=OBJ_TIPO_CENTRO;
+                            gs_apply_to_globals();
+                            break;
+                        case 3: // Boton 3: modo construccion almacen
+                            game_state.build_mode=OBJ_TIPO_ALMACEN;
+                            gs_apply_to_globals();
+                            break;
                         case 10: //Bot�n 10
-                            fin=1;
+                            game_state.running=0;
+                            gs_apply_to_globals();
                             break;
                     }
                 }         

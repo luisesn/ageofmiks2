@@ -19,6 +19,7 @@ Proyecto retomado y migrado a un toolchain moderno (SDL2 + CMake + MSYS2).
 | Flechas | Desplazar cámara |
 | Click izquierdo | Seleccionar unidad u objeto |
 | Click derecho | Ordenar movimiento (unidad seleccionada) / construir |
+| Click izquierdo en barra (botones 2/3) | Cambiar modo de construccion (centro/almacen) |
 | `W A S D` | Mover cursor isométrico |
 | `C` | Cambiar modo de cámara (libre / cursor / objeto / unidad) |
 | `R` | Poner aldeanos a recoger recursos |
