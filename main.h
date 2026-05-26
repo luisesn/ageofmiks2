@@ -138,6 +138,15 @@ void crear_unidades()
 
 int ver_memoria=0;
 
+void gs_apply_to_globals()
+{
+    fin = game_state.running ? 0 : 1;
+    camara = game_state.camera_mode;
+    fps = game_state.fps;
+    tiempo = game_state.frame_ms;
+    modo_construccion_tipo = game_state.build_mode;
+}
+
 void gs_sync_from_globals()
 {
     game_state.running = (fin==0);
@@ -239,8 +248,8 @@ void actualizar ()
         if (ud[j].activa()) u[ud[j].id_jugador]++;
     }
     textprintf(pantalla, fuente,0,0,clr_blanco,"CAM:%d FPS:%d  Recursos:%d  Sel:%d  Build:%s [B centro/N almacen] [1=mem 2=debug]",
-        camara, fps, jugador[JUGADOR_LOCAL].numero_recursos(), seleccion.n,
-        (modo_construccion_tipo==OBJ_TIPO_CENTRO)?"centro":"almacen");
+        game_state.camera_mode, game_state.fps, jugador[JUGADOR_LOCAL].numero_recursos(), seleccion.n,
+        (game_state.build_mode==OBJ_TIPO_CENTRO)?"centro":"almacen");
     textprintf(pantalla, fuente,0,14,clr_blanco,"Uds  P0:%d P1:%d P2:%d P3:%d",u[0], u[1], u[2], u[3]);
     if (ver_memoria==1)
     for (int i=1; i<jugadores; i++)
@@ -280,8 +289,9 @@ void actualizar ()
 
 void cambiar_camara()
 {
-     camara++;
-     if (camara>3) {camara=0;}
+    game_state.camera_mode++;
+    if (game_state.camera_mode>3) {game_state.camera_mode=0;}
+    gs_apply_to_globals();
  }
 
 void actualizar_uds()
@@ -417,8 +427,9 @@ while (SDL_PollEvent (&event))
     switch (event.type)
     {
         case SDL_KEYDOWN:
-            if (event.key.keysym.scancode==SDL_SCANCODE_B) modo_construccion_tipo=OBJ_TIPO_CENTRO;
-            if (event.key.keysym.scancode==SDL_SCANCODE_N) modo_construccion_tipo=OBJ_TIPO_ALMACEN;
+            if (event.key.keysym.scancode==SDL_SCANCODE_B) game_state.build_mode=OBJ_TIPO_CENTRO;
+            if (event.key.keysym.scancode==SDL_SCANCODE_N) game_state.build_mode=OBJ_TIPO_ALMACEN;
+            gs_apply_to_globals();
         	break;
         case SDL_KEYUP:
         	break;
@@ -428,7 +439,8 @@ while (SDL_PollEvent (&event))
              //if (tecla==event.jbutton.button) { teclap--;  if (teclap<=0) tecla=0; teclap=0;}
         	break;*/
         case SDL_QUIT:
-             fin=1;
+               game_state.running=0;
+               gs_apply_to_globals();
         	break;
         default:
         	break;
@@ -515,7 +527,7 @@ while (SDL_PollEvent (&event))
                                     break;
                             }
                         } else {
-                            command_enqueue(CMD_TIPO_CONSTRUIR, -1, JUGADOR_LOCAL, curx, cury, modo_construccion_tipo);
+                            command_enqueue(CMD_TIPO_CONSTRUIR, -1, JUGADOR_LOCAL, curx, cury, game_state.build_mode);
                         }
                    }
             }
@@ -525,7 +537,7 @@ while (SDL_PollEvent (&event))
 
 
 const Uint8 *teclas = SDL_GetKeyboardState(NULL);
-if (teclas[SDL_SCANCODE_ESCAPE]) fin=1;
+if (teclas[SDL_SCANCODE_ESCAPE]) { game_state.running=0; gs_apply_to_globals(); }
    if (teclas[SDL_SCANCODE_UP])
    {
         scrolly-=20;
@@ -562,7 +574,8 @@ if (teclas[SDL_SCANCODE_ESCAPE]) fin=1;
 
    if (teclas[SDL_SCANCODE_Q])
    {
-    fin=1;
+    game_state.running=0;
+    gs_apply_to_globals();
    }
    if (teclas[SDL_SCANCODE_C])
    {

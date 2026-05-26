@@ -92,7 +92,10 @@ int main (int argc, char *argv[])
     
     srand(time(0));
     double ang = 0;
-    camara=1;
+    game_state.running=1;
+    game_state.camera_mode=1;
+    game_state.build_mode=OBJ_TIPO_CENTRO;
+    gs_apply_to_globals();
     seleccionn=2;
     atexit (SDL_Quit);
     inicializar();
@@ -101,7 +104,8 @@ int main (int argc, char *argv[])
     crear_unidades();
     crear_objetos();
     
-    fin=0;
+    game_state.running=1;
+    gs_apply_to_globals();
     seleccion.n=-1;
 
     jugadores_configurar();
@@ -112,12 +116,13 @@ int main (int argc, char *argv[])
     //while(!fin) vteclas();
     //SDL_Delay(500);
     vteclas();
-    fin=0;
+    game_state.running=1;
+    gs_apply_to_globals();
 
     Uint32 previous_ticks = SDL_GetTicks();
     Uint32 accumulator_ms = 0;
 
-    while(!fin)
+    while(game_state.running)
     {
         Uint32 frame_start = SDL_GetTicks();
         Uint32 frame_delta = frame_start - previous_ticks;
@@ -149,8 +154,9 @@ int main (int argc, char *argv[])
         renderizar_frame();
 
         Uint32 frame_time = SDL_GetTicks() - frame_start;
-        tiempo = frame_time;
-        fps = (frame_time > 0) ? 1000 / frame_time : 999;
+        game_state.frame_ms = frame_time;
+        game_state.fps = (frame_time > 0) ? 1000 / frame_time : 999;
+        gs_apply_to_globals();
 
         if (frame_time < TARGET_FRAME_MS)
         {
