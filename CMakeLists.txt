@@ -11,6 +11,7 @@ find_package(SDL2_mixer REQUIRED)
 add_executable(AgeOfMiks2 main.cpp)
 
 target_link_libraries(AgeOfMiks2 PRIVATE
+    SDL2::SDL2main
     SDL2::SDL2
     SDL2_ttf::SDL2_ttf
     SDL2_mixer::SDL2_mixer
